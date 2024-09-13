@@ -5,7 +5,7 @@ import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <div className="bg-slate-100 min-h-svh">
+    <div className="min-h-dvh bg-slate-100">
       <div className="container mx-auto">
         <App />
       </div>
