@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../assets/logo.svg";
 import { MdEventAvailable } from "react-icons/md";
 import { MdFlightTakeoff } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
@@ -11,7 +10,7 @@ const Navbar = () => {
     <div className="bg-blue py-4 pb-48">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center">
-          <img src={logo} alt="logo" className="w-32 h-auto" />
+          <h2 className="text-red-100 font-bold text-3xl">TIKETA</h2>
           <div className="flex text-white font-semibold">
             <a className="flex items-center mx-4" href="#">
               <MdEventAvailable className="mr-1" />

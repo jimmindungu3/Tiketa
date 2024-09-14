@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-
 const Slider = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [animate, setAnimate] = useState(true); // New state for animation
   const images = [
-    "https://madfun.s3.af-south-1.amazonaws.com/Campus_Battle_Banner_765.JPG",
-    "https://madfun.s3.af-south-1.amazonaws.com/IOW-Main-Web-Banner.jpg",
-    "https://madfun.s3.af-south-1.amazonaws.com/SANCTUARY_Banner_488.png",
-    "https://madfun.s3.af-south-1.amazonaws.com/THE_TRINITY_Banner_219.png",
-    "https://madfun.s3.af-south-1.amazonaws.com/Naked_%26_Unashamed_Tour_Banner_849.jpg",
+    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302607/zavqakmbxremcxtxocwe_zzh2sv.jpg",
+    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302607/whn95dkscxeoibyjeouq_nl6ago.jpg",
+    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302606/mts5wyk7wmxkabqukwox_rwnnfw.jpg",
+    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302606/cbtjokdmkbhrhoti4lju_e6p9kr.jpg",
   ];
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setAnimate(false); // Trigger animation
-      setCurrentImageIndex((prevIndex) =>
-        (prevIndex + 1) % images.length // Wrap around at the end
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % images.length // Wrap around at the end
       );
-    }, 10000); // 4 seconds in milliseconds
+    }, 5000); // 4 seconds in milliseconds
 
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [images.length]); // Only run when images array changes
@@ -36,9 +34,7 @@ const Slider = () => {
 
   const handleNextClick = () => {
     setAnimate(false); // Trigger animation
-    setCurrentImageIndex((prevIndex) =>
-      (prevIndex + 1) % images.length
-    );
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
   return (
@@ -47,7 +43,9 @@ const Slider = () => {
         <img
           src={images[currentImageIndex]}
           alt="Image Slider"
-          className={`h-full w-full object-cover rounded-lg shadow-md transition duration-500 ease-in-out ${animate ? 'slider-image' : ''}`}
+          className={`mx-auto h-96 w-full rounded-lg shadow-md transition duration-500 ease-in-out ${
+            animate ? "slider-image" : ""
+          }`}
         />
         <button
           type="button"

@@ -37,7 +37,7 @@ const EventsSection = () => {
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
                   {event.title}
                 </h2>
-                <p className="text-gray-600 text-sm mb-2 font-semibold">
+                <p className="text-red-100 text-sm mb-2 font-semibold">
                   {event.date}
                 </p>
                 <p className="text-bluegray mb-4">{event.venue}</p>
