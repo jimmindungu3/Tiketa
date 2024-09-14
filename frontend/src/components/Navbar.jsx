@@ -3,14 +3,16 @@ import { MdEventAvailable } from "react-icons/md";
 import { MdFlightTakeoff } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
 import { MdHotel } from "react-icons/md";
-
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div className="bg-blue py-4 pb-48">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center">
-          <h2 className="text-red-100 font-bold text-3xl">TIKETA</h2>
+          <Link to={"/"}>
+            <h2 className="text-red-100 font-bold text-3xl">TIKETA</h2>
+          </Link>
           <div className="flex text-white font-semibold">
             <a className="flex items-center mx-4" href="#">
               <MdEventAvailable className="mr-1" />
@@ -30,10 +32,14 @@ const Navbar = () => {
             </a>
           </div>
           <div className="text-white font-semibold">
-            <button className="mx-2">Sign Up</button>
-            <button className="mx-2 bg-red-100 py-2 px-4 rounded-md">
-              Login
-            </button>
+            <Link to={"/sign-up"}>
+              <button className="mx-2">Sign Up</button>
+            </Link>
+            <Link to={"/login"}>
+              <button className="mx-2 bg-red-100 py-2 px-4 rounded-md">
+                Login
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -7,12 +7,11 @@ import { FaTiktok } from "react-icons/fa";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <div>
+    <div className="px-4">
       <div className="mx-auto max-w-6xl h-2 my-8 bg-bluegray"></div>
-      <div className="mx-auto my-6 max-w-6xl flex justify-between text-bluegray">
+      <div className="mx-auto my-6 max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-bluegray">
         <div>
           <h2 className="text-red-100 font-bold text-xl">TIKETA</h2>
-
           <div className="text-sm mt-2">
             &copy; {currentYear} TIKETA. All rights reserved.
           </div>
@@ -28,7 +27,7 @@ const Footer = () => {
           <div className="text-red-100 font-semibold mb-2 text-lg">
             Our Socials
           </div>
-          <div className="flex justify-between">
+          <div className="flex space-x-4">
             <a href="#">
               <FaFacebook />
             </a>
