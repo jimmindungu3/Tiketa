@@ -1,4 +1,5 @@
 import React from "react";
+
 import Navbar from "./components/Navbar";
 import Slider from "./components/Slider";
 import EventsSection from "./components/EventsSection";
