@@ -43,11 +43,6 @@ const handleErrors = (err) => {
   return errors;
 };
 
-
-
-
-
-
 // Root route
 app.get("/", (req, res) => {
   res.status(200).json({ Message: "Welcome Home" });
@@ -56,22 +51,31 @@ app.get("/", (req, res) => {
 // POST route to create a new user
 app.post("/api/users", async (req, res) => {
   const { fullName, email, password } = req.body;
-  try {
 
-    // Create a new user instance
-    const newUser = new User({
-      fullName,
-      email,
-      password,
-    });
+  // find if email is registered before attempt to save
+  const user = await User.findOne({ email });
+  if (user) {
+    res.status(400).json({ email: "This email is already registered" });
 
-    // Save the user to the database
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+  } else {
 
-  } catch (err) {
-    const errors = handleErrors(err)
-    res.status(400).json(errors);
+    try {
+      // Create a new user instance
+      const newUser = new User({
+        fullName,
+        email,
+        password,
+      });
+
+      // Save the user to the database
+      const savedUser = await newUser.save();
+      res.status(201).json(savedUser);
+      
+    } catch (err) {
+      const errors = handleErrors(err);
+      console.log(errors);
+      res.status(400).json(errors);
+    }
   }
 });
 
