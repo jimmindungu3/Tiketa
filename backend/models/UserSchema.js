@@ -12,14 +12,14 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    unique: [true, "This email already in use"],
+    unique: [true, "This email is already registered"],
     required: [true, "Please enter email address"],
     validate: [isEmail, "Please enter a valid email"],
     lowercase: true,
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Please enter a password"],
     minlength: [6, "Password must be 6 characters or more"]
   },
 });
