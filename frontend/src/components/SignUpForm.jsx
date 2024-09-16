@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const SignUpForm = () => {
+  const [fullNameError, setFullNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -11,6 +15,11 @@ const SignUpForm = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+
+    // Clear errors as the user types
+    if (e.target.id === "fullName") setFullNameError("");
+    if (e.target.id === "email") setEmailError("");
+    if (e.target.id === "password") setPasswordError("");
   };
 
   const handleSubmit = async (e) => {
@@ -32,10 +41,32 @@ const SignUpForm = () => {
       // Handle success
       console.log("User created:", response.data);
       alert("User created successfully!");
+
+      // Clear form data
+      // setFormData({
+      //   fullName: "",
+      //   email: "",
+      //   password: "",
+      //   confirmPassword: "",
+      // });
+      
     } catch (error) {
-      // Handle error
-      console.error("Error creating user:", error);
-      alert("There was an error creating the user.");
+      // Handle error response
+      if (error.response && error.response.status === 400) {
+        const errorData = error.response.data;
+        if (errorData.fullName) {
+          setFullNameError(errorData.fullName);
+        }
+        if (errorData.email) {
+          setEmailError(errorData.email);
+        }
+        if (errorData.password) {
+          setPasswordError(errorData.password);
+        }
+      } else {
+        console.error("Error creating user:", error);
+        alert("There was an error creating the user.");
+      }
     }
   };
 
@@ -58,6 +89,7 @@ const SignUpForm = () => {
             value={formData.fullName}
             onChange={handleChange}
           />
+          {fullNameError && <div className="text-red-100">{fullNameError}</div>}
         </div>
 
         {/* Email Field */}
@@ -70,12 +102,13 @@ const SignUpForm = () => {
           </label>
           <input
             className="text-gray-950 w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-bluegray"
-            type="email"
+            type="text"
             id="email"
             placeholder="example@mail.com"
             value={formData.email}
             onChange={handleChange}
           />
+          {emailError && <div className="text-red-100">{emailError}</div>}
         </div>
 
         {/* Password Field */}
@@ -94,6 +127,7 @@ const SignUpForm = () => {
             value={formData.password}
             onChange={handleChange}
           />
+          {passwordError && <div className="text-red-100">{passwordError}</div>}
         </div>
 
         {/* Confirm Password Field */}
