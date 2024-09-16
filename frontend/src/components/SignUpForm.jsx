@@ -1,11 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 const SignUpForm = () => {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:3000/api/users", {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Handle success
+      console.log("User created:", response.data);
+      alert("User created successfully!");
+    } catch (error) {
+      // Handle error
+      console.error("Error creating user:", error);
+      alert("There was an error creating the user.");
+    }
+  };
+
   return (
     <div className="bg-blue text-white p-6 max-w-lg mx-auto my-16 rounded-lg shadow-lg">
-      {/* <h2 className="text-2xl font-semibold text-white mb-6">Sign Up</h2> */}
-
-      <form>
+      <form onSubmit={handleSubmit}>
         {/* Full Name Field */}
         <div className="mb-4">
           <label
@@ -19,6 +55,8 @@ const SignUpForm = () => {
             type="text"
             id="fullName"
             placeholder="John Doe"
+            value={formData.fullName}
+            onChange={handleChange}
           />
         </div>
 
@@ -35,6 +73,8 @@ const SignUpForm = () => {
             type="email"
             id="email"
             placeholder="example@mail.com"
+            value={formData.email}
+            onChange={handleChange}
           />
         </div>
 
@@ -51,6 +91,8 @@ const SignUpForm = () => {
             type="password"
             id="password"
             placeholder="********"
+            value={formData.password}
+            onChange={handleChange}
           />
         </div>
 
@@ -58,15 +100,17 @@ const SignUpForm = () => {
         <div className="mb-6">
           <label
             className="block text-bluegray text-sm font-bold mb-2"
-            htmlFor="password"
+            htmlFor="confirmPassword"
           >
             Confirm Password
           </label>
           <input
             className="text-gray-950 w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-bluegray"
             type="password"
-            id="password"
+            id="confirmPassword"
             placeholder="********"
+            value={formData.confirmPassword}
+            onChange={handleChange}
           />
         </div>
 

@@ -7,7 +7,7 @@ const EventsSection = () => {
   useEffect(() => {
     // Replace '/path/to/your/events.json' with the actual path to your JSON data
     axios
-      .get("http://localhost:3000/events")
+      .get("http://localhost:3001/events")
       .then((response) => {
         setEvents(response.data);
       })
