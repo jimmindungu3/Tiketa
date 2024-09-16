@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
+const bcrypt = require("bcrypt");
 
+// Define userSchema
 const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
@@ -20,6 +22,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: [6, "Password must be 6 characters or more"]
   },
+});
+
+// fire a function before saving user to db
+// function takes current password, hashes it and puts it back to the userObject before its saved to db
+// function calls next method to pass execution to nex middleware in line
+userSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 const User = mongoose.model("User", userSchema);
