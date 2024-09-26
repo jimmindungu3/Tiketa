@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const SignUpForm = () => {
@@ -40,7 +41,7 @@ const SignUpForm = () => {
 
       // Handle success
       console.log("User created:", response.data);
-      alert("User created successfully!");
+      // alert("User created successfully!");
 
       // Clear form data
       // setFormData({
@@ -49,7 +50,6 @@ const SignUpForm = () => {
       //   password: "",
       //   confirmPassword: "",
       // });
-      
     } catch (error) {
       // Handle error response
       if (error.response && error.response.status === 400) {
@@ -104,7 +104,7 @@ const SignUpForm = () => {
             className="text-gray-950 w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-bluegray"
             type="text"
             id="email"
-            placeholder="example@mail.com"
+            placeholder="email@example.com"
             value={formData.email}
             onChange={handleChange}
           />
@@ -158,6 +158,12 @@ const SignUpForm = () => {
           </button>
         </div>
       </form>
+      <div className="my-4">
+        Already Signed Up?{" "}
+        <span className="font-semibold text-red-100">
+          <Link to={"/login"}>Login Here</Link>
+        </span>
+      </div>
     </div>
   );
 };
