@@ -33,15 +33,19 @@ const SignUpForm = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/users", {
-        fullName: formData.fullName,
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/users",
+        {
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+        },
+        { withCredentials: true }
+      );
 
       // Handle success
       console.log("User created:", response.data);
-      // alert("User created successfully!");
+      alert("User created successfully!");
 
       // Clear form data
       // setFormData({
@@ -158,6 +162,7 @@ const SignUpForm = () => {
           </button>
         </div>
       </form>
+      <hr className="text-white mt-6" />
       <div className="my-4">
         Already Signed Up?{" "}
         <span className="font-semibold text-red-100">
