@@ -43,6 +43,7 @@ const LoginForm = () => {
           </button>
         </div>
       </form>
+      <hr className='text-white mt-6'/>
       <div className="my-4">
         Don't have an account?{" "}
         <span className="font-semibold text-red-100">
