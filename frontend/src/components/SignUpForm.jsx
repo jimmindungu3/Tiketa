@@ -43,17 +43,13 @@ const SignUpForm = () => {
         { withCredentials: true }
       );
 
-      // Handle success
-      console.log("User created:", response.data);
-      alert("User created successfully!");
-
       // Clear form data
-      // setFormData({
-      //   fullName: "",
-      //   email: "",
-      //   password: "",
-      //   confirmPassword: "",
-      // });
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
     } catch (error) {
       // Handle error response
       if (error.response && error.response.status === 400) {
