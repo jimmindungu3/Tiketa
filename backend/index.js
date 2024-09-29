@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const maxAge = 3 * 24 * 60 * 60; // maxAge of 3 days in seconds
+const maxAge = 1 * 60 * 60; // maxAge of 1 hour in seconds
 
 // environment variables
 const DB_URI = process.env.CONNECTION_STRING;
@@ -36,13 +36,18 @@ const handleErrors = (err) => {
   let errors = { email: "", password: "" };
 
   // handle login errors
-  // if (err.message === "Incorrect email") {
-  //   errors.email = "Email not registered";
-  // }
+  if (err.message === "Incorrect email") {
+    errors.email = "Email not registered";
+  }
 
-  // if (err.message === "Incorrect password") {
-  //   errors.password = "Incorrect password";
-  // }
+  if (err.message === "Incorrect password") {
+    errors.password = "Incorrect password";
+  }
+
+  if (err.message === "Email doesn't exist") {
+    errors.email = "Email not registered";
+  }
+  
 
   // Handle signup errors
   // Check if the error is related to user validation
@@ -78,10 +83,10 @@ app.post("/api/users", async (req, res) => {
     // Once user is created and saved, create cookie and send it back to client
     const token = createToken(user._id);
     res.cookie("jwt", token, {
-      httpOnly: true,
+      // httpOnly: true,
       maxAge: maxAge * 1000,
       sameSite: "lax",
-      secure: false, // Note: This requires HTTPS
+      secure: false,
     });
     res.status(201).json({ user: user._id });
   } catch (err) {
@@ -96,7 +101,11 @@ app.post("/api/login", async (req, res) => {
   try {
     const user = await User.login(email, password);
     const token = createToken(user._id);
-    res.cookie("jwt", token, { maxAge: maxAge * 1000 }); // maxAge in milliseconds
+    res.cookie("jwt", token, {
+      maxAge: maxAge * 1000,
+      sameSite: "lax",
+      secure: false,
+    });
     res.status(200).json({ user: user._id });
   } catch (error) {
     const err = handleErrors(error);
