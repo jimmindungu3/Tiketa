@@ -7,18 +7,21 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [jwtCookie, setJwtCookie] = useState(null);
+  const [userName, setUserName] = useState(null); // State for the user's full name
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const dropdownRef = useRef(null); // Ref for the dropdown
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const cookie = Cookies.get("jwt");
-    setJwtCookie(cookie); // Update state when the cookie is found
-  }, []); // Runs only once after component mounts
+    const jwt = Cookies.get("jwt");
+    const user = Cookies.get("user"); // Retrieve the user cookie
+    setJwtCookie(jwt);
+    setUserName(user); // Set the user's name in state
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownVisible(false); // Close dropdown if click is outside
+        setDropdownVisible(false);
       }
     };
 
@@ -30,13 +33,15 @@ const Navbar = () => {
   }, [dropdownVisible]);
 
   const handleLogout = () => {
-    Cookies.remove("jwt"); // Remove the JWT cookie
-    setJwtCookie(null); // Update state to reflect the logout
-    setDropdownVisible(false); // Hide the dropdown
+    Cookies.remove("jwt");
+    Cookies.remove("user"); // Remove the user cookie as well
+    setJwtCookie(null);
+    setUserName(null); // Reset the user's name on logout
+    setDropdownVisible(false);
   };
 
   const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible); // Toggle the dropdown visibility
+    setDropdownVisible(!dropdownVisible);
   };
 
   return (
@@ -47,10 +52,10 @@ const Navbar = () => {
             <h2 className="text-red-100 font-bold text-3xl">TIKETA</h2>
           </Link>
           <div className="flex text-white font-semibold">
-            <a className="flex items-center mx-4" href="#">
+            <Link to={"/"} className="flex items-center mx-4" href="#">
               <MdEventAvailable className="mr-1" />
               Events
-            </a>
+            </Link>
             <a className="flex items-center mx-4" href="#">
               <RiMovie2Line className="mr-1" />
               Movies
@@ -71,11 +76,12 @@ const Navbar = () => {
                   onClick={toggleDropdown}
                   className="mx-2 flex items-center"
                 >
-                  <FaUserCircle className="text-3xl" />
+                  <FaUserCircle className="text-3xl mr-2" />{" "}
+                  {userName && <span>{userName}</span>}{" "}
                 </button>
                 {dropdownVisible && (
                   <div
-                    ref={dropdownRef} // Attach ref to the dropdown
+                    ref={dropdownRef}
                     className="z-20 absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg"
                   >
                     <div className="block px-4 py-2 hover:bg-gray-200 hover:cursor-not-allowed hover:rounded-md">
