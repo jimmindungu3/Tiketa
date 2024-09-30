@@ -5,6 +5,8 @@ import axios from "axios";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -24,7 +26,12 @@ const LoginForm = () => {
         navigate("/");
       }
     } catch (error) {
-      console.log(error.response.data); // Log the error to the console
+      if (error.response.data.email) {
+        setEmailError(error.response.data.email);
+      }
+      if (error.response.data.password) {
+        setPasswordError(error.response.data.password);
+      }
     }
   };
 
@@ -49,6 +56,7 @@ const LoginForm = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="example@mail.com"
           />
+          {emailError && <div className="text-red-100">{emailError}</div>}
         </div>
 
         {/* Password Field */}
@@ -67,6 +75,7 @@ const LoginForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="********"
           />
+          {passwordError && <div className="text-red-100">{passwordError}</div>}
         </div>
 
         {/* Submit Button */}
