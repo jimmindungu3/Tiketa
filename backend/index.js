@@ -47,7 +47,6 @@ const handleErrors = (err) => {
   if (err.message === "Email doesn't exist") {
     errors.email = "Email not registered";
   }
-  
 
   // Handle signup errors
   // Check if the error is related to user validation
@@ -88,6 +87,11 @@ app.post("/api/users", async (req, res) => {
       sameSite: "lax",
       secure: false,
     });
+    res.cookie("user", user.fullName, {
+      maxAge: maxAge * 1000,
+      sameSite: "lax",
+      secure: false,
+    });
     res.status(201).json({ user: user._id });
   } catch (err) {
     const errors = handleErrors(err);
@@ -101,6 +105,11 @@ app.post("/api/login", async (req, res) => {
   try {
     const user = await User.login(email, password);
     const token = createToken(user._id);
+    res.cookie("user", user.fullName, {
+      maxAge: maxAge * 1000,
+      sameSite: "lax",
+      secure: false,
+    });
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
       sameSite: "lax",
