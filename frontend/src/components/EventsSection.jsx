@@ -1,21 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
-const EventsSection = () => {
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    // Replace '/path/to/your/events.json' with the actual path to your JSON data
-    axios
-      .get("http://localhost:3001/events")
-      .then((response) => {
-        setEvents(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the events!", error);
-      });
-  }, []);
-
+const EventsSection = ({ events }) => {
   return (
     <div className="max-w-6xl mx-auto mt-12 p-4">
       <h1 className="text-3xl font-bold text-red-100 text-center mb-12">
