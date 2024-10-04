@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        white: "#eff6ee",
+        white: "#F5F5F5",
         red: {
           100: "#DD0426",
           200: "#F02D3A",
@@ -12,6 +12,7 @@ export default {
         blue: "#273043",
         bluegray: "#9197AE",
         silver: "#C0C0C0",
+        safaricomgreen: '#3aa335',
       },
     },
   },
