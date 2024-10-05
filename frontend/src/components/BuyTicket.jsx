@@ -7,21 +7,20 @@ const BuyTicket = ({ events }) => {
 
   const [regularCount, setRegularCount] = useState(0);
   const [vipCount, setVipCount] = useState(0);
-
-  // Assuming prices are part of the selectedEvent object
-  const ticketPrices = {
-    vip: selectedEvent?.vip || 1500,
-    regular: selectedEvent?.regular || 1000,
-  };
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleRegularChange = (event) => {
-    const count = parseInt(event.target.value, 10) || 0;
+    const count = parseInt(event.target.value) || 0;
     setRegularCount(count);
   };
 
   const handleVipChange = (event) => {
-    const count = parseInt(event.target.value, 10) || 0;
+    const count = parseInt(event.target.value) || 0;
     setVipCount(count);
+  };
+
+  const handleBuyTicket = () => {
+    console.log(selectedEvent.id, { vipCount, regularCount, phoneNumber });
   };
 
   return (
@@ -31,7 +30,7 @@ const BuyTicket = ({ events }) => {
           {selectedEvent ? (
             <div className="grid grid-cols-1 lg:grid-cols-2">
               {/* Event Image and Details */}
-              <div className="p-6">
+              <div className="p-6 max-w-lg mx-auto">
                 <img
                   src={selectedEvent.image}
                   alt={selectedEvent.title}
@@ -50,13 +49,13 @@ const BuyTicket = ({ events }) => {
               </div>
 
               {/* Ticket Selection and Payment */}
-              <div className="p-6 bg-gray-50">
+              <div className="p-6 bg-gray-50 max-w-lg mx-auto">
                 <div className="flex flex-col mb-6">
                   <p className="font-bold text-2xl mb-4 text-red-100">
                     Pick Your Tickets
                   </p>
                   <label className="text-gray-900 font-semibold mb-2">
-                    Regular: Ksh. {ticketPrices.regular}
+                    Regular: Ksh. {selectedEvent.regular}
                   </label>
                   <input
                     type="number"
@@ -67,7 +66,7 @@ const BuyTicket = ({ events }) => {
                   />
 
                   <label className="text-gray-900 font-semibold mb-2">
-                    VIP: Ksh. {ticketPrices.vip}
+                    VIP: Ksh. {selectedEvent.vip}
                   </label>
                   <input
                     type="number"
@@ -77,7 +76,9 @@ const BuyTicket = ({ events }) => {
                     className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-4"
                   />
                   <p className="mt-2 font-bold text-xl text-safaricomgreen">
-                    Total: Ksh. {regularCount * ticketPrices.regular + vipCount * ticketPrices.vip}
+                    Total: Ksh.{" "}
+                    {regularCount * parseInt(selectedEvent.regular) +
+                      vipCount * parseInt(selectedEvent.vip)}
                   </p>
                 </div>
 
@@ -85,19 +86,28 @@ const BuyTicket = ({ events }) => {
                 <div className="bg-safaricomgreen text-white p-6 rounded-md">
                   <h2 className="text-2xl font-bold mb-4">Lipa Na M-Pesa</h2>
                   <p className="mb-4">
-                    To complete your purchase, please enter your Safaricom number
-                    and confirm the payment.
+                    To complete your purchase, please enter your Safaricom
+                    number and confirm the payment.
                   </p>
                   <div className="mb-6">
-                    <label className="block font-semibold mb-2">Phone Number:</label>
+                    <label className="block font-semibold mb-2">
+                      Phone Number:
+                    </label>
                     <input
-                      type="text"
+                      type="tel"
+                      pattern="[0-9]*"
                       placeholder="e.g. 0712345678"
-                      className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 text-gray-950"
                     />
                   </div>
-                  <button className="mt-4 w-full py-2 px-6 rounded-md shadow-md font-bold text-lg bg-white text-red-100">
-                    Buy
+
+                  <button
+                    onClick={handleBuyTicket}
+                    className="mt-4 w-full py-2 px-6 rounded-md shadow-md font-bold text-lg bg-white text-red-100"
+                  >
+                    PAY
                   </button>
                 </div>
               </div>
