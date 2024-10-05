@@ -7,13 +7,10 @@ const Events = ({ events }) => {
       <h1 className="text-3xl font-bold text-red-100 text-center mb-12">
         Happening Soon
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-10">
         {events.map((event) => (
           <Link key={event.id} to={`/book-event/${event.id}`}>
-            <div
-              key={event.id}
-              className="rounded-md overflow-hidden shadow-lg flex flex-col h-full"
-            >
+            <div className="rounded-md overflow-hidden shadow-lg flex flex-col h-full">
               <img
                 className="w-full h-64 object-cover rounded-md"
                 src={event.image}
