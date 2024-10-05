@@ -3,13 +3,16 @@ import { Link } from "react-router-dom";
 
 const Events = ({ events }) => {
   return (
-    <div className="max-w-6xl mx-auto mt-12 p-4">
+    <div className="max-w-6xl min-w-min mx-auto mt-12 p-4">
       <h1 className="text-3xl font-bold text-red-100 text-center mb-12">
         Happening Soon
       </h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-10">
         {events.map((event) => (
-          <div className="rounded-md overflow-hidden shadow-lg flex flex-col h-full">
+          <div
+            key={event.id}
+            className="rounded-md overflow-hidden shadow-lg flex flex-col h-full"
+          >
             <img
               className="w-full h-64 object-cover rounded-md"
               src={event.image}
@@ -26,9 +29,7 @@ const Events = ({ events }) => {
                 <p className="text-bluegray mb-4">{event.venue}</p>
               </div>
               <button className="bg-red-100 py-2 text-center text-white font-semibold rounded-md mt-auto">
-                <Link key={event.id} to={`/book-event/${event.id}`}>
-                  BUY TICKET
-                </Link>
+                <Link to={`/book-event/${event.id}`}>BUY TICKET</Link>
               </button>
             </div>
           </div>
