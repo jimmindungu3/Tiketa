@@ -10,7 +10,7 @@ const BuyTicket = ({ events }) => {
 
   // Assuming prices are part of the selectedEvent object
   const ticketPrices = {
-    vip: selectedEvent?.vip || 1500, // Using event properties for prices
+    vip: selectedEvent?.vip || 1500,
     regular: selectedEvent?.regular || 1000,
   };
 
@@ -30,8 +30,13 @@ const BuyTicket = ({ events }) => {
         <div className="rounded-md shadow-lg overflow-hidden">
           {selectedEvent ? (
             <div className="grid grid-cols-1 lg:grid-cols-2">
-              {/* Event Details */}
+              {/* Event Image and Details */}
               <div className="p-6">
+                <img
+                  src={selectedEvent.image}
+                  alt={selectedEvent.title}
+                  className="h-64 w-full object-top rounded-md mb-6"
+                />
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">
                   {selectedEvent.title}
                 </h1>
@@ -44,13 +49,57 @@ const BuyTicket = ({ events }) => {
                 </p>
               </div>
 
-              {/* Event Image */}
-              <div className="h-64 w-full object-cover p-6">
-                <img
-                  src={selectedEvent.image}
-                  alt={selectedEvent.title}
-                  className="h-full w-full object-cover rounded-t-md"
-                />
+              {/* Ticket Selection and Payment */}
+              <div className="p-6 bg-gray-50">
+                <div className="flex flex-col mb-6">
+                  <p className="font-bold text-2xl mb-4 text-red-100">
+                    Pick Your Tickets
+                  </p>
+                  <label className="text-gray-900 font-semibold mb-2">
+                    Regular: Ksh. {ticketPrices.regular}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={regularCount}
+                    onChange={handleRegularChange}
+                    className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-4"
+                  />
+
+                  <label className="text-gray-900 font-semibold mb-2">
+                    VIP: Ksh. {ticketPrices.vip}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={vipCount}
+                    onChange={handleVipChange}
+                    className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-4"
+                  />
+                  <p className="mt-2 font-bold text-xl text-safaricomgreen">
+                    Total: Ksh. {regularCount * ticketPrices.regular + vipCount * ticketPrices.vip}
+                  </p>
+                </div>
+
+                {/* M-Pesa Payment Section */}
+                <div className="bg-safaricomgreen text-white p-6 rounded-md">
+                  <h2 className="text-2xl font-bold mb-4">Lipa Na M-Pesa</h2>
+                  <p className="mb-4">
+                    To complete your purchase, please enter your Safaricom number
+                    and confirm the payment.
+                  </p>
+                  <div className="mb-6">
+                    <label className="block font-semibold mb-2">Phone Number:</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 0712345678"
+                      className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200"
+                    />
+                  </div>
+                  <button className="mt-4 w-full py-2 px-6 rounded-md shadow-md font-bold text-lg bg-white text-red-100">
+                    Buy
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -58,61 +107,6 @@ const BuyTicket = ({ events }) => {
               Event not found
             </p>
           )}
-
-          {/* Ticket Selection and Payment */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 p-6">
-            <div className="flex flex-col">
-              <p className="font-bold text-2xl mb-2 text-red-100">
-                Pick Your Tickets
-              </p>
-              <label className="text-gray-900 font-semibold mb-2">
-                Regular: Ksh. {ticketPrices.regular}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={regularCount}
-                onChange={handleRegularChange}
-                className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-4"
-              />
-
-              <label className="text-gray-900 font-semibold mb-2">
-                VIP: Ksh. {ticketPrices.vip}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={vipCount}
-                onChange={handleVipChange}
-                className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-4"
-              />
-              <p className="mt-2 font-bold text-xl text-safaricomgreen">
-                Total: Ksh
-              </p>
-            </div>
-
-            {/* M-Pesa Payment */}
-            <div className="bg-safaricomgreen text-white p-6 rounded-md">
-              <h2 className="text-2xl font-bold mb-4">Lipa Na M-Pesa</h2>
-              <p className="mb-4">
-                To complete your purchase, please enter your Safaricom number
-                and confirm the payment.
-              </p>
-              <div className="mb-6">
-                <label className="block font-semibold mb-2">
-                  Phone Number:
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. 0712345678"
-                  className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200"
-                />
-              </div>
-              <button className="mt-4 w-full py-2 px-6 rounded-md shadow-md font-bold text-lg bg-white text-red-100">
-                Buy
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
