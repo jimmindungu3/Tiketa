@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+const slugify = (text) => {
+  return text
+    .toLowerCase()
+    .replace(/ /g, '_')        // Replace spaces with underscores
+    .replace(/[^\w-]+/g, '');  // Remove all non-word characters
+};
+
 const Events = ({ events }) => {
   return (
     <div className="max-w-6xl min-w-min mx-auto mt-12 p-4">
@@ -10,7 +17,7 @@ const Events = ({ events }) => {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-10">
         {events.map((event) => (
           <div
-            key={event.id}
+            key={event._id}
             className="rounded-md overflow-hidden shadow-lg flex flex-col h-full"
           >
             <img
@@ -29,7 +36,7 @@ const Events = ({ events }) => {
                 <p className="text-bluegray mb-4">{event.venue}</p>
               </div>
               <button className="bg-red-100 py-2 text-center text-white font-semibold rounded-md mt-auto">
-                <Link to={`/book-event/${event.id}`}>BUY TICKET</Link>
+                <Link to={`/buy_ticket/${slugify(event.title)}`}>BUY TICKET</Link>
               </button>
             </div>
           </div>
