@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-const BuyTicket = ({ events }) => {
-  const { id } = useParams();
-  const selectedEvent = events.find((event) => event.id === id);
+const slugify = (text) => {
+  return text
+    .toLowerCase()
+    .replace(/ /g, '_')
+    .replace(/[^\w-]+/g, '');
+};
 
+const BuyTicket = ({ events }) => {
+  const { title } = useParams(); // Get the slugified title from URL
   const [regularCount, setRegularCount] = useState(0);
   const [vipCount, setVipCount] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  // Find the event by matching the slugified title
+  const selectedEvent = events.find((event) => slugify(event.title) === title);
 
   const handleRegularChange = (event) => {
     const count = parseInt(event.target.value) || 0;
@@ -20,7 +28,7 @@ const BuyTicket = ({ events }) => {
   };
 
   const handleBuyTicket = () => {
-    console.log(selectedEvent.id, { vipCount, regularCount, phoneNumber });
+    console.log(selectedEvent._id, { vipCount, regularCount, phoneNumber });
   };
 
   return (
