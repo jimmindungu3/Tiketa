@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/UserSchema.js");
+const Event = require("./models/EventSchema.js");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
@@ -19,7 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your React app's URL
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -66,6 +67,16 @@ const handleErrors = (err) => {
 // Root route
 app.get("/", (req, res) => {
   res.status(200).json({ Message: "Welcome Home" });
+});
+
+// GET Events route
+app.get('/api/events', async (req, res) => {
+  try {
+    const events = await Event.find();
+    res.status(200).json(events);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving events', error: err });
+  }
 });
 
 // Create user route
