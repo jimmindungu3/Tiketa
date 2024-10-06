@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const slugify = (text) => {
   return text
     .toLowerCase()
-    .replace(/ /g, '_')        // Replace spaces with underscores
+    .replace(/ /g, '-')        // Replace spaces with hyphens
     .replace(/[^\w-]+/g, '');  // Remove all non-word characters
 };
 
@@ -36,7 +36,7 @@ const Events = ({ events }) => {
                 <p className="text-bluegray mb-4">{event.venue}</p>
               </div>
               <button className="bg-red-100 py-2 text-center text-white font-semibold rounded-md mt-auto">
-                <Link to={`/buy_ticket/${slugify(event.title)}`}>BUY TICKET</Link>
+                <Link to={`/buy-ticket/${slugify(event.title)}`}>BUY TICKET</Link>
               </button>
             </div>
           </div>

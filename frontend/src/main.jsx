@@ -39,7 +39,7 @@ const Main = () => {
       element: <Login />,
     },
     {
-      path: "/buy_ticket/:title",
+      path: "/buy-ticket/:title",
       element: <BuyTicketPage events={events} />,
     },
   ]);

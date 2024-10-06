@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 const slugify = (text) => {
   return text
     .toLowerCase()
-    .replace(/ /g, '_')
+    .replace(/ /g, '-')
     .replace(/[^\w-]+/g, '');
 };
 
