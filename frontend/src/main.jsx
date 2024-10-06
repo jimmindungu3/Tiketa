@@ -16,7 +16,7 @@ const Main = () => {
   // Fetch events when the app starts
   useEffect(() => {
     axios
-      .get("http://localhost:3001/events")
+      .get("http://localhost:3000/api/events")
       .then((response) => {
         setEvents(response.data);
       })
@@ -39,11 +39,7 @@ const Main = () => {
       element: <Login />,
     },
     {
-      path: "/buy-ticket",
-      element: <BuyTicketPage />,
-    },
-    {
-      path: "/book-event/:id", // ID will later be changed to event title
+      path: "/buy_ticket/:title",
       element: <BuyTicketPage events={events} />,
     },
   ]);
