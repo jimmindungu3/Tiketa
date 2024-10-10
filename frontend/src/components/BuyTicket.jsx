@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const slugify = (text) => {
   return text
     .toLowerCase()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '');
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
 };
 
 const BuyTicket = ({ events }) => {
@@ -27,8 +28,13 @@ const BuyTicket = ({ events }) => {
     setVipCount(count);
   };
 
-  const handleBuyTicket = () => {
-    console.log(selectedEvent._id, { vipCount, regularCount, phoneNumber });
+  const handleBuyTicket = async (e) => {
+    e.preventDefault();
+
+    axios
+      .post("http://localhost:3000/stk-push", { phone: phoneNumber, amount: 1 })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
   };
 
   return (
