@@ -15,8 +15,12 @@ const BuyTicket = ({ events }) => {
   const [vipCount, setVipCount] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  const [phoneError, setPhoneError] = useState(""); // Phone number error state
+  const [ticketError, setTicketError] = useState(""); // Ticket selection error state
+
   // Find the event by matching the slugified title
   const selectedEvent = events.find((event) => slugify(event.title) === title);
+  const eventID = selectedEvent?._id;
 
   const handleRegularChange = (event) => {
     const count = parseInt(event.target.value) || 0;
@@ -31,8 +35,39 @@ const BuyTicket = ({ events }) => {
   const handleBuyTicket = async (e) => {
     e.preventDefault();
 
+    let hasError = false; // Flag to check if there is any error
+
+    // Reset error messages
+    setPhoneError("");
+    setTicketError("");
+
+    // Validate phone number
+    if (!phoneNumber) {
+      setPhoneError("Please provide your phone number.");
+      hasError = true;
+    }
+
+    // Validate ticket selection
+    if (regularCount === 0 && vipCount === 0) {
+      setTicketError("Please select at least one ticket category.");
+      hasError = true;
+    }
+
+    if (hasError) {
+      return; // Stop if there are any errors
+    }
+
+    // Clear errors if everything is valid
+    setPhoneError("");
+    setTicketError("");
+
     axios
-      .post("http://localhost:3000/stk-push", { phone: phoneNumber, amount: 1 })
+      .post("http://localhost:3000/stk-push", {
+        phone: phoneNumber,
+        regularCount,
+        vipCount,
+        eventID,
+      })
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
   };
@@ -68,6 +103,8 @@ const BuyTicket = ({ events }) => {
                   <p className="font-bold text-2xl mb-4 text-red-100">
                     Pick Your Tickets
                   </p>
+
+                  {/* Regular Ticket */}
                   <label className="text-gray-900 font-semibold mb-2">
                     Regular: Ksh. {selectedEvent.regular}
                   </label>
@@ -76,9 +113,10 @@ const BuyTicket = ({ events }) => {
                     min="0"
                     value={regularCount}
                     onChange={handleRegularChange}
-                    className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-4"
+                    className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-2"
                   />
 
+                  {/* VIP Ticket */}
                   <label className="text-gray-900 font-semibold mb-2">
                     VIP: Ksh. {selectedEvent.vip}
                   </label>
@@ -89,6 +127,14 @@ const BuyTicket = ({ events }) => {
                     onChange={handleVipChange}
                     className="p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 mb-4"
                   />
+                  {/* Ticket Error */}
+                  {ticketError && (
+                    <p className="text-red-600 text-md font-semibold animate-blink mb-4">
+                      {ticketError}
+                    </p>
+                  )}
+
+                  {/* Show total to pay */}
                   <p className="mt-2 font-bold text-xl text-safaricomgreen">
                     Total: Ksh.{" "}
                     {regularCount * parseInt(selectedEvent.regular) +
@@ -103,6 +149,8 @@ const BuyTicket = ({ events }) => {
                     To complete your purchase, please enter your Safaricom
                     number and confirm the payment.
                   </p>
+
+                  {/* Phone Number */}
                   <div className="mb-6">
                     <label className="block font-semibold mb-2">
                       Phone Number:
@@ -115,6 +163,12 @@ const BuyTicket = ({ events }) => {
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-200 text-gray-950"
                     />
+                    {/* Phone Error */}
+                    {phoneError && (
+                      <p className="text-md font-semibold text- animate-blink mt-2">
+                        {phoneError}
+                      </p>
+                    )}
                   </div>
 
                   <button
