@@ -1,4 +1,6 @@
 const axios = require("axios");
+const Event = require("../models/EventSchema");
+
 require("dotenv").config();
 
 const consumerKey = process.env.CONSUMER_KEY;
@@ -21,7 +23,7 @@ const createSTKToken = async (req, res, next) => {
 
     // Store the token in the request object and call next
     req.token = response.data.access_token;
-    console.log(response.data);
+    // console.log(response.data);
     next();
 
     // handle errors in generating token
@@ -32,10 +34,17 @@ const createSTKToken = async (req, res, next) => {
 };
 
 const stkPush = async (req, res) => {
+  // calculate amount client will pay
+  const event = await Event.findById(req.body.eventID);
+
+  const amount =
+    parseInt(req.body.vipCount) * event.vip +
+    parseInt(req.body.regularCount) * event.regular;
+
   const shortCode = 174379;
   const phone = req.body.phone.substring(1);
-  const amount = req.body.amount;
-  const passKey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+  const passKey =
+    "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
   const url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
   const date = new Date();
   const timestamp =
@@ -71,11 +80,11 @@ const stkPush = async (req, res) => {
       },
     })
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       res.status(200).json(data.data);
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       res.status(400).json(err.message);
     });
 };
