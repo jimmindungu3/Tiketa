@@ -14,6 +14,15 @@ export default {
         silver: "#C0C0C0",
         safaricomgreen: '#3aa335',
       },
+      keyframes: {
+        blink: {
+          '0%, 100%': { opacity: 1 },
+          '50%': { opacity: 0 },
+        },
+      },
+      animation: {
+        blink: 'blink 1s steps(1) 3', // Blinks once every second for 4 seconds
+      },
     },
   },
   plugins: [],
