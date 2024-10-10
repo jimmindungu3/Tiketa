@@ -6,6 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const { createSTKToken, stkPush } = require("./controllers/token.js");
 
 const maxAge = 1 * 60 * 60; // maxAge of 1 hour in seconds
 
@@ -70,12 +71,12 @@ app.get("/", (req, res) => {
 });
 
 // GET Events route
-app.get('/api/events', async (req, res) => {
+app.get("/api/events", async (req, res) => {
   try {
     const events = await Event.find();
     res.status(200).json(events);
   } catch (err) {
-    res.status(500).json({ message: 'Error retrieving events', error: err });
+    res.status(500).json({ message: "Error retrieving events", error: err });
   }
 });
 
@@ -131,6 +132,12 @@ app.post("/api/login", async (req, res) => {
     const err = handleErrors(error);
     res.status(400).json(err);
   }
+});
+
+// STK PUSH handler
+app.post("/stk-push", createSTKToken, stkPush, (req, res) => {
+  const token = req.token;
+  res.json({ token });
 });
 
 // Connect to MongoDB using Mongoose
