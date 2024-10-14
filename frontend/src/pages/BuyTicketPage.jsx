@@ -10,7 +10,7 @@ const BuyTicketPage = ({events}) => {
       <div className="-mt-36 bg-slate-50">
         <BuyTicket events={events}/>
       </div>
-      <Footer />
+      
     </div>
   );
 };

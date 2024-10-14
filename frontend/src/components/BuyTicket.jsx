@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Footer from "./Footer";
 
 const slugify = (text) => {
   return text
@@ -187,6 +188,7 @@ const BuyTicket = ({ events }) => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
