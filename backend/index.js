@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/UserSchema.js");
 const Event = require("./models/EventSchema.js");
+const Payment = require('./models/PaymentSchema.js')
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
@@ -140,6 +141,37 @@ app.post("/stk-push", createSTKToken, stkPush, (req, res) => {
   res.json({ token });
 });
 
+
+// Route to handle M-Pesa payment callback //////////////////////////////////////////////////////////////////////
+app.post("/mpesa-callback", async (req, res) => {
+  try {
+    const callbackData = req.body.Body.stkCallback;
+
+    // Check if the payment was successful
+    if (callbackData.ResultCode === 0) {
+      const paymentData = {
+        phone: callbackData.CallbackMetadata.Item.find((item) => item.Name === "PhoneNumber").Value,
+        amount: callbackData.CallbackMetadata.Item.find((item) => item.Name === "Amount").Value,
+        transactionId: callbackData.CallbackMetadata.Item.find((item) => item.Name === "MpesaReceiptNumber").Value,
+        transactionDate: callbackData.CallbackMetadata.Item.find((item) => item.Name === "TransactionDate").Value,
+      };
+
+      // Save payment data to the database (assuming you have a Payment model)
+      await Payment.create(paymentData);
+
+      // Send success response back to Safaricom
+      res.status(200).json({ message: "Payment processed successfully" });
+    } else {
+      res.status(400).json({ message: "Payment failed" });
+    }
+  } catch (error) {
+    console.error("Error processing callback:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
 // Connect to MongoDB using Mongoose
 mongoose
   .connect(DB_URI)
@@ -147,3 +179,5 @@ mongoose
     app.listen(PORT, () => console.log(`App listening on port ${PORT}`))
   )
   .catch((err) => console.error("MongoDB connection error:", err));
+
+  
