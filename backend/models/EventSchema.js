@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 
 // Define EventSchema
 const EventSchema = new mongoose.Schema({
