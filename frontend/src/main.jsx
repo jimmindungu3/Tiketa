@@ -12,6 +12,7 @@ import BuyTicketPage from "./pages/BuyTicketPage.jsx";
 
 const Main = () => {
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Fetch events when the app starts
   useEffect(() => {
@@ -19,16 +20,18 @@ const Main = () => {
       .get("https://tiketa.onrender.com/api/events")
       .then((response) => {
         setEvents(response.data);
+        setLoading(false); // Set loading to false when events are fetched
       })
       .catch((error) => {
         console.error("There was an error fetching the events!", error);
+        setLoading(false); // Stop loading on error as well
       });
   }, []);
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home events={events} />,
+      element: <Home events={events} loading={loading} />, // Pass loading state
     },
     {
       path: "/sign-up",

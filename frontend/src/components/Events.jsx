@@ -1,14 +1,23 @@
 import React from "react";
+import Loader from "./Loader";
 import { Link } from "react-router-dom";
 
 const slugify = (text) => {
   return text
     .toLowerCase()
-    .replace(/ /g, '-')        // Replace spaces with hyphens
-    .replace(/[^\w-]+/g, '');  // Remove all non-word characters
+    .replace(/ /g, "-") // Replace spaces with hyphens
+    .replace(/[^\w-]+/g, ""); // Remove all non-word characters
 };
 
-const Events = ({ events }) => {
+const Events = ({ events, loading }) => {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl min-w-min mx-auto mt-12 p-4">
       <h1 className="text-3xl font-bold text-red-100 text-center mb-12">
@@ -36,7 +45,9 @@ const Events = ({ events }) => {
                 <p className="text-bluegray mb-4">{event.venue}</p>
               </div>
               <button className="bg-red-100 py-2 text-center text-white font-semibold rounded-md mt-auto">
-                <Link to={`/buy-ticket/${slugify(event.title)}`}>BUY TICKET</Link>
+                <Link to={`/buy-ticket/${slugify(event.title)}`}>
+                  BUY TICKET
+                </Link>
               </button>
             </div>
           </div>
