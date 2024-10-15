@@ -64,7 +64,7 @@ const stkPush = async (req, res) => {
     Password: password,
     Timestamp: timestamp,
     TransactionType: "CustomerPayBillOnline",
-    Amount: 1,
+    Amount: amount,
     PartyA: `254${phone}`,
     PartyB: shortCode,
     PhoneNumber: `254${phone}`,
