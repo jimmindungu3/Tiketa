@@ -34,7 +34,7 @@ const SignUpForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/users",
+        "https://tiketa.onrender.com/api/users",
         {
           fullName: formData.fullName,
           email: formData.email,

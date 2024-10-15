@@ -64,11 +64,11 @@ const stkPush = async (req, res) => {
     Password: password,
     Timestamp: timestamp,
     TransactionType: "CustomerPayBillOnline",
-    Amount: amount,
+    Amount: 1,
     PartyA: `254${phone}`,
     PartyB: shortCode,
     PhoneNumber: `254${phone}`,
-    CallBackURL: "https://8ed0-102-0-11-108.ngrok-free.app/mpesa-callback",
+    CallBackURL: "https://tiketa.onrender.com/mpesa-callback", // Ngrok public link
     AccountReference: "Mpesa Test",
     TransactionDesc: "Testing stk push",
   };

@@ -13,7 +13,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/login",
+        "https://tiketa.onrender.com/api/login",
         {
           email,
           password,

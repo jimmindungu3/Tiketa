@@ -16,7 +16,7 @@ const Main = () => {
   // Fetch events when the app starts
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/events")
+      .get("https://tiketa.onrender.com/api/events")
       .then((response) => {
         setEvents(response.data);
       })

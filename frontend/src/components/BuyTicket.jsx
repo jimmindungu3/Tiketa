@@ -63,7 +63,7 @@ const BuyTicket = ({ events }) => {
     setTicketError("");
 
     axios
-      .post("http://localhost:3000/stk-push", {
+      .post("https://tiketa.onrender.com/stk-push", {
         phone: phoneNumber,
         regularCount,
         vipCount,
