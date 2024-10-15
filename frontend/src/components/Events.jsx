@@ -10,15 +10,9 @@ const slugify = (text) => {
 };
 
 const Events = ({ events, loading }) => {
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader />
-      </div>
-    );
-  }
-
-  return (
+  loading ? (
+    <Loader />
+  ) : (
     <div className="max-w-6xl min-w-min mx-auto mt-12 p-4">
       <h1 className="text-3xl font-bold text-red-100 text-center mb-12">
         Happening Soon

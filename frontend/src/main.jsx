@@ -20,6 +20,7 @@ const Main = () => {
       .get("https://tiketa.onrender.com/api/events")
       .then((response) => {
         setEvents(response.data);
+        console.log({response})
         setLoading(false); // Set loading to false when events are fetched
       })
       .catch((error) => {
