@@ -14,18 +14,18 @@ const Main = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
 
-  // Fetch events when the app starts
   useEffect(() => {
     axios
-      .get("https://tiketa.onrender.com/api/events")
+      .get("https://tiketa.onrender.com/api/events", {
+        withCredentials: true,
+      })
       .then((response) => {
         setEvents(response.data);
-        // console.log({response})
-        setLoading(false); // Set loading to false when events are fetched
+        setLoading(false);
       })
       .catch((error) => {
         console.error("There was an error fetching the events!", error);
-        setLoading(false); // Stop loading on error as well
+        setLoading(false);
       });
   }, []);
 
