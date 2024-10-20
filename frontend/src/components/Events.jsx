@@ -10,9 +10,12 @@ const slugify = (text) => {
 };
 
 const Events = ({ events, loading }) => {
-  loading ? (
-    <Loader />
-  ) : (
+  // Ensure the return based on the loading state
+  if (loading) {
+    return <Loader />;
+  }
+
+  return (
     <div className="max-w-6xl min-w-min mx-auto mt-12 p-4">
       <h1 className="text-3xl font-bold text-red-100 text-center mb-12">
         Happening Soon
