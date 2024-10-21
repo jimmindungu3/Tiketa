@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/UserSchema.js");
 const Event = require("./models/EventSchema.js");
-const Payment = require('./models/PaymentSchema.js')
+const Payment = require("./models/PaymentSchema.js");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
@@ -23,14 +23,19 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://tiketa.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  const allowedOrigins = ["https://tiketa.vercel.app", "http://localhost:5173"];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
   next();
 });
-
-
 
 // Create JWT function
 const createToken = (id) => {
@@ -145,7 +150,6 @@ app.post("/stk-push", createSTKToken, stkPush, (req, res) => {
   res.json({ token });
 });
 
-
 // Route to handle M-Pesa payment callback //////////////////////////////////////////////////////////////////////
 app.post("/mpesa-callback", async (req, res) => {
   try {
@@ -154,10 +158,18 @@ app.post("/mpesa-callback", async (req, res) => {
     // Check if the payment was successful
     if (callbackData.ResultCode === 0) {
       const paymentData = {
-        phone: callbackData.CallbackMetadata.Item.find((item) => item.Name === "PhoneNumber").Value,
-        amount: callbackData.CallbackMetadata.Item.find((item) => item.Name === "Amount").Value,
-        transactionId: callbackData.CallbackMetadata.Item.find((item) => item.Name === "MpesaReceiptNumber").Value,
-        transactionDate: callbackData.CallbackMetadata.Item.find((item) => item.Name === "TransactionDate").Value,
+        phone: callbackData.CallbackMetadata.Item.find(
+          (item) => item.Name === "PhoneNumber"
+        ).Value,
+        amount: callbackData.CallbackMetadata.Item.find(
+          (item) => item.Name === "Amount"
+        ).Value,
+        transactionId: callbackData.CallbackMetadata.Item.find(
+          (item) => item.Name === "MpesaReceiptNumber"
+        ).Value,
+        transactionDate: callbackData.CallbackMetadata.Item.find(
+          (item) => item.Name === "TransactionDate"
+        ).Value,
       };
 
       // Save payment data to the database (assuming you have a Payment model)
@@ -174,8 +186,6 @@ app.post("/mpesa-callback", async (req, res) => {
   }
 });
 
-
-
 // Connect to MongoDB using Mongoose
 mongoose
   .connect(DB_URI)
@@ -183,5 +193,3 @@ mongoose
     app.listen(PORT, () => console.log(`App listening on port ${PORT}`))
   )
   .catch((err) => console.error("MongoDB connection error:", err));
-
-  
