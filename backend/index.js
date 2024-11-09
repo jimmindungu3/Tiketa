@@ -3,11 +3,10 @@ const mongoose = require("mongoose");
 const User = require("./models/UserSchema.js");
 const Event = require("./models/EventSchema.js");
 const Payment = require("./models/PaymentSchema.js");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const { createSTKToken, stkPush } = require("./controllers/token.js");
+require("dotenv").config();
 
 const maxAge = 60 * 60; // maxAge of 1 hour in seconds
 
@@ -106,12 +105,12 @@ app.post("/api/users", async (req, res) => {
     res.cookie("jwt", token, {
       // httpOnly: true,
       maxAge: maxAge * 1000,
-      sameSite: "lax",
+      sameSite: "none",
       secure: false,
     });
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
-      sameSite: "lax",
+      sameSite: "none",
       secure: false,
     });
     res.status(201).json({ user: user._id });
