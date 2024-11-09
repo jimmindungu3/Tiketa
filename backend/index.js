@@ -9,73 +9,45 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { createSTKToken, stkPush } = require("./controllers/token.js");
 
-// Environment variables and constants
+const maxAge = 60 * 60; // maxAge of 1 hour in seconds
+
+// environment variables
 const DB_URI = process.env.CONNECTION_STRING;
 const PORT = process.env.PORT || 3000;
 const myJwtSecret = process.env.SECRET_KEY;
-const maxAge = 1 * 60 * 60; // maxAge of 1 hour in seconds
-const isProduction = process.env.NODE_ENV === 'production';
-
-// Cookie configuration
-const cookieConfig = {
-  maxAge: maxAge * 1000, // Convert to milliseconds
-  secure: isProduction,
-  sameSite: isProduction ? 'none' : 'lax',
-  path: '/',
-  domain: isProduction ? '.vercel.app' : 'localhost'
-};
 
 const app = express();
 
-// Middleware
+// use middlewares
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS configuration
 app.use((req, res, next) => {
   const allowedOrigins = ["https://tiketa.vercel.app", "http://localhost:5173"];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   }
 
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   next();
 });
 
-// Authentication middleware
-const authenticateToken = (req, res, next) => {
-  const token = req.cookies.jwt;
-
-  if (!token) {
-    return res.status(401).json({ message: "Authentication required" });
-  }
-
-  jwt.verify(token, myJwtSecret, (err, decodedToken) => {
-    if (err) {
-      return res.status(403).json({ message: "Invalid or expired token" });
-    }
-    req.userId = decodedToken.id;
-    next();
-  });
-};
-
-// JWT creation utility
+// Create JWT function
 const createToken = (id) => {
   return jwt.sign({ id }, myJwtSecret, { expiresIn: maxAge });
 };
 
-// Error handler utility
+// Handle errors that occur during user operations
 const handleErrors = (err) => {
+  // Initialize an object to store other specific error messages
   let errors = { email: "", password: "" };
 
+  // handle login errors
   if (err.message === "Incorrect email") {
     errors.email = "Email not registered";
   }
@@ -88,56 +60,60 @@ const handleErrors = (err) => {
     errors.email = "Email not registered";
   }
 
+  // Handle signup errors
+  // Check if the error is related to user validation
   if (err.message.includes("User validation failed")) {
+    // Extract and process individual validation errors
     Object.values(err.errors).forEach(({ properties }) => {
+      // Update the errors object with specific error messages
+      // properties.path: The field that failed validation (e.g., 'email' or 'password')
+      // properties.message: The corresponding error message for that field
       errors[properties.path] = properties.message;
     });
   }
-
+  // Return the errors object containing field-specific error messages
   return errors;
 };
 
-// Routes
-
-// Home route
+// Root route
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "Welcome to Tiketa API" });
+  res.status(200).json({ Message: "Welcome Home" });
 });
 
-// Get all events (public route)
+// GET Events route
 app.get("/api/events", async (req, res) => {
   try {
     const events = await Event.find();
     res.status(200).json(events);
   } catch (err) {
-    res.status(500).json({ message: "Error retrieving events", error: err.message });
+    res.status(500).json({ message: "Error retrieving events", error: err });
   }
 });
 
-// User registration
+// Create user route
 app.post("/api/users", async (req, res) => {
   const { fullName, email, password } = req.body;
-  
   try {
-    const userExists = await User.findOne({ email });
-    if (userExists) {
+    // Check for existing user with the same email
+    const userWithEmail = await User.findOne({ email });
+    if (userWithEmail) {
       return res.status(400).json({ email: "This email is already in use" });
     }
-
     const user = await User.create({ fullName, email, password });
+
+    // Once user is created and saved, create cookie and send it back to client
     const token = createToken(user._id);
-
-    // Set cookies
     res.cookie("jwt", token, {
-      ...cookieConfig,
-      httpOnly: true
+      // httpOnly: true,
+      maxAge: maxAge * 1000,
+      sameSite: "lax",
+      secure: false,
     });
-    
     res.cookie("user", user.fullName, {
-      ...cookieConfig,
-      httpOnly: false
+      maxAge: maxAge * 1000,
+      sameSite: "lax",
+      secure: false,
     });
-
     res.status(201).json({ user: user._id });
   } catch (err) {
     const errors = handleErrors(err);
@@ -145,54 +121,43 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
-// User login
+// LOGIN POST request
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
-  
   try {
     const user = await User.login(email, password);
     const token = createToken(user._id);
-
-    // Set cookies
-    res.cookie("jwt", token, {
-      ...cookieConfig,
-      httpOnly: true
-    });
-    
     res.cookie("user", user.fullName, {
-      ...cookieConfig,
-      httpOnly: false
+      maxAge: maxAge * 1000,
+      sameSite: "lax",
+      httpOnly: false,
+      secure: true,
     });
-
+    res.cookie("jwt", token, {
+      maxAge: maxAge * 1000,
+      sameSite: "lax",
+      httpOnly: true,
+      secure: true,
+    });
     res.status(200).json({ user: user._id });
   } catch (error) {
-    const errors = handleErrors(error);
-    res.status(400).json(errors);
+    const err = handleErrors(error);
+    res.status(400).json(err);
   }
 });
 
-// User logout
-app.post("/api/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
-  res.cookie("user", "", { maxAge: 1 });
-  res.status(200).json({ message: "Logged out successfully" });
-});
-
-// Check auth status
-app.get("/api/check-auth", authenticateToken, (req, res) => {
-  res.status(200).json({ authenticated: true, userId: req.userId });
-});
-
-// M-Pesa payment routes
-app.post("/stk-push", authenticateToken, createSTKToken, stkPush, (req, res) => {
+// STK PUSH handler
+app.post("/stk-push", createSTKToken, stkPush, (req, res) => {
   const token = req.token;
   res.json({ token });
 });
 
+// Route to handle M-Pesa payment callback //////////////////////////////////////////////////////////////////////
 app.post("/mpesa-callback", async (req, res) => {
   try {
     const callbackData = req.body.Body.stkCallback;
 
+    // Check if the payment was successful
     if (callbackData.ResultCode === 0) {
       const paymentData = {
         phone: callbackData.CallbackMetadata.Item.find(
@@ -209,7 +174,10 @@ app.post("/mpesa-callback", async (req, res) => {
         ).Value,
       };
 
+      // Save payment data to the database (assuming you have a Payment model)
       await Payment.create(paymentData);
+
+      // Send success response back to Safaricom
       res.status(200).json({ message: "Payment processed successfully" });
     } else {
       res.status(400).json({ message: "Payment failed" });
@@ -220,26 +188,10 @@ app.post("/mpesa-callback", async (req, res) => {
   }
 });
 
-// Database connection and server startup
+// Connect to MongoDB using Mongoose
 mongoose
   .connect(DB_URI)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-    process.exit(1);
-  });
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+  .then(() =>
+    app.listen(PORT, () => console.log(`App listening on port ${PORT}`))
+  )
+  .catch((err) => console.error("MongoDB connection error:", err));
