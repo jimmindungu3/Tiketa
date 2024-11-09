@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 const User = require("./models/UserSchema.js");
 const Event = require("./models/EventSchema.js");
 const Payment = require("./models/PaymentSchema.js");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const { createSTKToken, stkPush } = require("./controllers/token.js");
 require("dotenv").config();
+const { createSTKToken, stkPush } = require("./controllers/token.js");
 
-const maxAge = 60 * 60; // maxAge of 1 hour in seconds
+const maxAge = 1 * 60 * 60; // maxAge of 1 hour in seconds
 
 // environment variables
 const DB_URI = process.env.CONNECTION_STRING;
@@ -30,11 +31,14 @@ app.use((req, res, next) => {
   }
 
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow cookies
   next();
 });
+
 
 // Create JWT function
 const createToken = (id) => {
@@ -102,17 +106,18 @@ app.post("/api/users", async (req, res) => {
 
     // Once user is created and saved, create cookie and send it back to client
     const token = createToken(user._id);
-    res.cookie("jwt", token, {
-      // httpOnly: true,
-      maxAge: maxAge * 1000,
-      sameSite: "none",
-      secure: false,
-    });
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
       sameSite: "none",
-      secure: false,
+      secure: true,
     });
+    
+    res.cookie("jwt", token, {
+      maxAge: maxAge * 1000,
+      sameSite: "none",
+      secure: true,
+    });
+    
     res.status(201).json({ user: user._id });
   } catch (err) {
     const errors = handleErrors(err);
@@ -129,14 +134,12 @@ app.post("/api/login", async (req, res) => {
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
       sameSite: "lax",
-      httpOnly: false,
-      secure: true,
+      secure: false,
     });
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
       sameSite: "lax",
-      httpOnly: true,
-      secure: true,
+      secure: false,
     });
     res.status(200).json({ user: user._id });
   } catch (error) {

@@ -16,9 +16,7 @@ const Main = () => {
 
   useEffect(() => {
     axios
-      .get("https://tiketa.onrender.com/api/events", {
-        withCredentials: true,
-      })
+      .get("https://tiketa.onrender.com/api/events", { withCredentials: true })
       .then((response) => {
         setEvents(response.data);
         setLoading(false);
