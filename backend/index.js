@@ -35,7 +35,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Create JWT function
 const createToken = (id) => {
   return jwt.sign({ id }, myJwtSecret, { expiresIn: maxAge });
@@ -133,12 +132,14 @@ app.post("/api/login", async (req, res) => {
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
       sameSite: "lax",
-      secure: false,
+      secure: true,
+      httpOnly: false,
     });
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
       sameSite: "lax",
-      secure: false,
+      secure: true,
+      httpOnly: true,
     });
     res.status(200).json({ user: user._id });
   } catch (error) {
