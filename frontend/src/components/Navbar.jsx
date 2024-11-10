@@ -7,15 +7,15 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [jwtCookie, setJwtCookie] = useState(null);
-  const [userName, setUserName] = useState(null); // State for the user's full name
+  const [userName, setUserName] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     const jwt = Cookies.get("jwt");
-    const user = Cookies.get("user"); // Retrieve the user cookie
+    const user = Cookies.get("user");
     setJwtCookie(jwt);
-    setUserName(user); // Set the user's name in state
+    setUserName(user);
   }, []);
 
   useEffect(() => {
@@ -34,9 +34,9 @@ const Navbar = () => {
 
   const handleLogout = () => {
     Cookies.remove("jwt");
-    Cookies.remove("user"); // Remove the user cookie as well
+    Cookies.remove("user");
     setJwtCookie(null);
-    setUserName(null); // Reset the user's name on logout
+    setUserName(null);
     setDropdownVisible(false);
   };
 

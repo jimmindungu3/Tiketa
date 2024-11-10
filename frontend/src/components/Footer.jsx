@@ -3,6 +3,9 @@ import { FaFacebook } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaInstagramSquare } from "react-icons/fa";
 import { FaTiktok } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import { BsTelephoneInboundFill } from "react-icons/bs";
+import { TbMailFilled } from "react-icons/tb";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -42,12 +45,11 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        <div className="flex flex-col text-sm">
+        <div className="flex flex-col text-sm leading-relaxed">
           <div className="text-red-100 font-semibold mb-2 text-lg">Contact</div>
-          <div className="my-2 font-semibold">Physical Location</div>
-          <div>Kephanie House off Thika-Garissa Road</div>
-          <div>Tel: +254 717 055 495</div>
-          <div>email: jimmindungu3@gmail.com</div>
+          <div className="flex items-center"><TbMailFilled className="mr-2 text-md" />jimmindungu3@gmail.com</div>
+          <div className="flex item-center"><BsTelephoneInboundFill className="mr-2 text-md" />+254 717 055 495</div>
+          <div className="flex items-center"><FaLocationDot className="mr-2 text-md" />Kephanie House off Thika-Garissa Road</div>
         </div>
       </div>
     </div>
