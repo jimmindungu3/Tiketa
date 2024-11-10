@@ -3,13 +3,12 @@ const mongoose = require("mongoose");
 const User = require("./models/UserSchema.js");
 const Event = require("./models/EventSchema.js");
 const Payment = require("./models/PaymentSchema.js");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const { createSTKToken, stkPush } = require("./controllers/token.js");
+require("dotenv").config();
 
-const maxAge = 1 * 60 * 60; // maxAge of 1 hour in seconds
+const maxAge = 60 * 60; // MaxAge of 1 hour i seconds
 
 // environment variables
 const DB_URI = process.env.CONNECTION_STRING;
@@ -31,10 +30,7 @@ app.use((req, res, next) => {
   }
 
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization"
-  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow cookies
   next();
 });
@@ -106,18 +102,21 @@ app.post("/api/users", async (req, res) => {
 
     // Once user is created and saved, create cookie and send it back to client
     const token = createToken(user._id);
+
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
       sameSite: "none",
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: false,
     });
-    
+
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
       sameSite: "none",
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
     });
-    
+
     res.status(201).json({ user: user._id });
   } catch (err) {
     const errors = handleErrors(err);
@@ -176,7 +175,7 @@ app.post("/mpesa-callback", async (req, res) => {
         ).Value,
       };
 
-      // Save payment data to the database (assuming you have a Payment model)
+      // Save payment data to the database
       await Payment.create(paymentData);
 
       // Send success response back to Safaricom
