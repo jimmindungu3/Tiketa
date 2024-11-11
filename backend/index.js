@@ -5,6 +5,7 @@ const Event = require("./models/EventSchema.js");
 const Payment = require("./models/PaymentSchema.js");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const cors = require('cors')
 const { createSTKToken, stkPush } = require("./controllers/token.js");
 require("dotenv").config();
 
@@ -21,19 +22,14 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-  const allowedOrigins = ["https://tiketa.vercel.app", "http://localhost:5173"];
-  const origin = req.headers.origin;
 
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow cookies
-  next();
-});
+app.use(
+  cors({
+    origin: ["https://tiketa.vercel.app", "http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 // Create JWT function
 const createToken = (id) => {
@@ -102,19 +98,22 @@ app.post("/api/users", async (req, res) => {
     // Once user is created and saved, create cookie and send it back to client
     const token = createToken(user._id);
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
-      sameSite: "none",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       httpOnly: false,
     });
-
+    
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
-      sameSite: "none",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       httpOnly: true,
     });
+    
 
     res.status(201).json({ user: user._id });
   } catch (err) {
