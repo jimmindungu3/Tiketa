@@ -130,15 +130,15 @@ app.post("/api/login", async (req, res) => {
     const token = createToken(user._id);
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
-      sameSite: "lax",
-      secure: false,
+      sameSite: process.env.NODE_ENV === 'production'? 'none' : "lax",
+      secure: process.env.NODE_ENV === 'production',
       httpOnly: false,
     });
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
-      sameSite: "lax",
-      secure: false,
-      httpOnly: false,
+      sameSite: process.env.NODE_ENV === 'production'? 'none' : "lax",
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
     });
     res.status(200).json({ user: user._id });
   } catch (error) {
