@@ -101,7 +101,7 @@ const Navbar = () => {
 
           {/* Desktop Auth Section */}
           <div className="hidden md:block text-white font-semibold relative">
-            {jwtCookie ? (
+            {userName ? (
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
