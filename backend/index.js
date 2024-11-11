@@ -132,14 +132,14 @@ app.post("/api/login", async (req, res) => {
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
       sameSite: "lax",
-      secure: true,
+      secure: false,
       httpOnly: false,
     });
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
       sameSite: "lax",
-      secure: true,
-      httpOnly: true,
+      secure: false,
+      httpOnly: false,
     });
     res.status(200).json({ user: user._id });
   } catch (error) {
