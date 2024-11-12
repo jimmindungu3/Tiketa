@@ -5,11 +5,12 @@ const Event = require("./models/EventSchema.js");
 const Payment = require("./models/PaymentSchema.js");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const cors = require('cors')
+const cors = require("cors");
 const { createSTKToken, stkPush } = require("./controllers/token.js");
 require("dotenv").config();
 
 const maxAge = 60 * 60; // MaxAge of 1 hour i seconds
+const isProduction = process.env.NODE_ENV === "production";
 
 // environment variables
 const DB_URI = process.env.CONNECTION_STRING;
@@ -21,7 +22,6 @@ const app = express();
 // use middlewares
 app.use(express.json());
 app.use(cookieParser());
-
 
 app.use(
   cors({
@@ -98,22 +98,19 @@ app.post("/api/users", async (req, res) => {
     // Once user is created and saved, create cookie and send it back to client
     const token = createToken(user._id);
 
-    const isProduction = process.env.NODE_ENV === "production";
-
     res.cookie("user", user.fullName, {
       maxAge: maxAge * 1000,
       sameSite: isProduction ? "none" : "lax",
       secure: isProduction,
       httpOnly: false,
     });
-    
+
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
       sameSite: isProduction ? "none" : "lax",
       secure: isProduction,
       httpOnly: true,
     });
-    
 
     res.status(201).json({ user: user._id });
   } catch (err) {
@@ -128,23 +125,28 @@ app.post("/api/login", async (req, res) => {
   try {
     const user = await User.login(email, password);
     const token = createToken(user._id);
-    res.cookie("user", user.fullName, {
-      maxAge: maxAge * 1000,
-      sameSite: process.env.NODE_ENV === 'production'? 'none' : "lax",
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: false,
-    });
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
-      sameSite: process.env.NODE_ENV === 'production'? 'none' : "lax",
-      secure: process.env.NODE_ENV === 'production',
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       httpOnly: true,
     });
-    res.status(200).json({ user: user._id });
+    res.status(200).json({ userName: user.fullName });
   } catch (error) {
     const err = handleErrors(error);
     res.status(400).json(err);
   }
+});
+
+// LOGOUT POST request
+app.post("/api/logout", (req, res) => {
+  res.cookie("jwt", "", {
+    maxAge: 10,
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
+    httpOnly: true,
+  });
+  res.status(200).json({ message: "Logout Successful" });
 });
 
 // STK PUSH handler
