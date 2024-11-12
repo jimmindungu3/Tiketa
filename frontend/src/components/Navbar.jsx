@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import Cookies from "js-cookie";
+import axios from "axios";
 import { MdEventAvailable, MdFlightTakeoff, MdHotel } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { RiMovie2Line } from "react-icons/ri";
@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
-  const [jwtCookie, setJwtCookie] = useState(null);
   const [userName, setUserName] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,10 +14,8 @@ const Navbar = () => {
   const mobileMenuRef = useRef(null);
 
   useEffect(() => {
-    const jwt = Cookies.get("jwt");
-    const user = Cookies.get("user");
-    setJwtCookie(jwt);
-    setUserName(user);
+    const userName = localStorage.getItem("userName");
+    setUserName(userName);
   }, []);
 
   useEffect(() => {
@@ -26,7 +23,10 @@ const Navbar = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownVisible(false);
       }
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -35,13 +35,16 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropdownVisible]);
 
-  const handleLogout = () => {
-    Cookies.remove("jwt");
-    Cookies.remove("user");
-    setJwtCookie(null);
-    setUserName(null);
-    setDropdownVisible(false);
-    setIsMobileMenuOpen(false);
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem("userName");
+      setUserName(null)
+      await axios.post("hhttps://tiketa.onrender.com/api/logout", {}, { withCredentials: true });
+      setDropdownVisible(false);
+      setIsMobileMenuOpen(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const toggleDropdown = () => {
@@ -150,7 +153,7 @@ const Navbar = () => {
           >
             <div className="flex flex-col space-y-4">
               <NavLinks />
-              {jwtCookie ? (
+              {userName ? (
                 <div className="border-t border-white/20 pt-4">
                   <div className="flex items-center mb-4">
                     <FaUserCircle className="text-3xl mr-2" />
