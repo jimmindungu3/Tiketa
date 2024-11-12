@@ -77,7 +77,7 @@ const Navbar = () => {
   );
 
   return (
-    <div className="bg-blue py-4 pb-48">
+    <div className="bg-blue py-4 md:pb-48"> 
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center">
           <Link to={"/"}>
