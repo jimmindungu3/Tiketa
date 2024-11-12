@@ -20,7 +20,8 @@ const LoginForm = () => {
         },
         { withCredentials: true }
       );
-      if (response.status === 200 && response.data.user) {
+      if (response.status === 200 && response.data.userName) {
+        localStorage.setItem('userName', response.data.userName)
         setEmail("");
         setPassword("");
         navigate("/");
