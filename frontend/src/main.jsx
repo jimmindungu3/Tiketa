@@ -4,6 +4,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_API_BASE_URL_DEV
+    : import.meta.env.VITE_API_BASE_URL_PROD;
+
 // Import pages
 import Home from "./pages/Home.jsx";
 import Sign from "./pages/Sign.jsx";
@@ -16,7 +21,7 @@ const Main = () => {
 
   useEffect(() => {
     axios
-      .get("https://tiketa.onrender.com/api/events", { withCredentials: true })
+      .get(`${API_BASE_URL}/api/events`, { withCredentials: true })
       .then((response) => {
         setEvents(response.data);
         setLoading(false);

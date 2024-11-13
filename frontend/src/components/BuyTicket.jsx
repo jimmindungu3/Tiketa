@@ -3,6 +3,11 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Footer from "./Footer";
 
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_API_BASE_URL_DEV
+    : import.meta.env.VITE_API_BASE_URL_PROD;
+
 const slugify = (text) => {
   return text
     .toLowerCase()
@@ -64,7 +69,7 @@ const BuyTicket = ({ events }) => {
 
     axios
       .post(
-        "https://tiketa.onrender.com/stk-push",
+        `${API_BASE_URL}/stk-push`,
         {
           phone: phoneNumber,
           regularCount,

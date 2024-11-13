@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_API_BASE_URL_DEV
+    : import.meta.env.VITE_API_BASE_URL_PROD;
+
 const SignUpForm = () => {
   const [fullNameError, setFullNameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -34,7 +39,7 @@ const SignUpForm = () => {
 
     try {
       const response = await axios.post(
-        "https://tiketa.onrender.com/api/users",
+        `${API_BASE_URL}/api/users`,
         {
           fullName: formData.fullName,
           email: formData.email,

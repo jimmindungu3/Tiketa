@@ -6,6 +6,11 @@ import { RiMovie2Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_API_BASE_URL_DEV
+    : import.meta.env.VITE_API_BASE_URL_PROD;
+
 const Navbar = () => {
   const [userName, setUserName] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -39,7 +44,7 @@ const Navbar = () => {
     try {
       localStorage.removeItem("userName");
       setUserName(null)
-      await axios.post("hhttps://tiketa.onrender.com/api/logout", {}, { withCredentials: true });
+      await axios.post(`${API_BASE_URL}/api/logout`, {}, { withCredentials: true });
       setDropdownVisible(false);
       setIsMobileMenuOpen(false);
     } catch (error) {
