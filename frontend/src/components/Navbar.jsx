@@ -5,6 +5,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { RiMovie2Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import Cookies from "js-cookie"
 
 const API_BASE_URL =
   import.meta.env.VITE_ENVIRONMENT === "development"
@@ -19,8 +20,8 @@ const Navbar = () => {
   const mobileMenuRef = useRef(null);
 
   useEffect(() => {
-    const userName = localStorage.getItem("userName");
-    setUserName(userName);
+    const userName = Cookies.get("userName");
+    setUserName(userName)
   }, []);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      localStorage.removeItem("userName");
+      Cookies.remove("userName")
       setUserName(null)
       await axios.post(`${API_BASE_URL}/api/logout`, {}, { withCredentials: true });
       setDropdownVisible(false);

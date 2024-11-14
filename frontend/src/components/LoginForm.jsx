@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie"
 
 const API_BASE_URL =
   import.meta.env.VITE_ENVIRONMENT === "development"
@@ -26,7 +27,7 @@ const LoginForm = () => {
         { withCredentials: true }
       );
       if (response.status === 200 && response.data.userName) {
-        localStorage.setItem('userName', response.data.userName)
+        Cookies.set("userName", response.data.userName, {expires: 1/24})
         setEmail("");
         setPassword("");
         navigate("/");
