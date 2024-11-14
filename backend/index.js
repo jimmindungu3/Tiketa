@@ -98,13 +98,6 @@ app.post("/api/users", async (req, res) => {
     // Once user is created and saved, create cookie and send it back to client
     const token = createToken(user._id);
 
-    res.cookie("user", user.fullName, {
-      maxAge: maxAge * 1000,
-      sameSite: isProduction ? "none" : "lax",
-      secure: isProduction,
-      httpOnly: false,
-    });
-
     res.cookie("jwt", token, {
       maxAge: maxAge * 1000,
       sameSite: isProduction ? "none" : "lax",
