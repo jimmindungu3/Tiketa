@@ -14,6 +14,7 @@ import Home from "./pages/Home.jsx";
 import Sign from "./pages/Sign.jsx";
 import Login from "./pages/Login.jsx";
 import BuyTicketPage from "./pages/BuyTicketPage.jsx";
+import CreateEvent from "./pages/CreateEvent.jsx";
 
 const Main = () => {
   const [events, setEvents] = useState([]);
@@ -48,6 +49,10 @@ const Main = () => {
     {
       path: "/buy-ticket/:title",
       element: <BuyTicketPage events={events} />,
+    },
+    {
+      path: "/create-event",
+      element: <CreateEvent />,
     },
   ]);
 
