@@ -12,22 +12,26 @@ const stkPush = require("./routes/stkPush");
 const PORT = process.env.PORT || 3000;
 const DB_URI = process.env.CONNECTION_STRING;
 
-
 // Initialize app
 const app = express();
 
-// Use middlewares
-app.use(express.json());
-app.use(cookieParser());
+// Increase the payload size limit
+app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
-// Configure CORS
+// CORS config
 app.use(
   cors({
     origin: ["https://tiketa.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// Use middlewares
+app.use(express.json());
+app.use(cookieParser());
 
 // Consume the routers
 app.use(eventRoutes);
