@@ -12,7 +12,7 @@ const Footer = () => {
   return (
     <div className="pb-8 text-bluegray bg-blue bg-opacity-96">
       <div className="h-2 my-8 bg-bluegray"></div>
-      <div className="mx-auto mt-6 max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ">
+      <div className="mx-auto mt-6 px-4 max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ">
         <div>
           <h2 className="text-red-100 font-bold text-xl">TIKETA</h2>
           <div className="text-sm mt-2">
