@@ -30,7 +30,7 @@ const LoginForm = () => {
         Cookies.set("userName", response.data.userName, {expires: 1/24})
         setEmail("");
         setPassword("");
-        navigate("/");
+        navigate("/create-event");
       }
     } catch (error) {
       if (error.response.data.email) {
