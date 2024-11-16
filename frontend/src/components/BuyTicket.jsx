@@ -83,8 +83,8 @@ const BuyTicket = ({ events }) => {
   };
 
   return (
-    <div className="py-4">
-      <div className="mx-auto max-w-6xl my-12 p-4">
+    <div>
+      <div className="mx-auto max-w-6xl mt-36 p-4">
         <div className="rounded-md shadow-lg overflow-hidden">
           {selectedEvent ? (
             <div className="grid grid-cols-1 lg:grid-cols-2">
