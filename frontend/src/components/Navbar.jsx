@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { MdEventAvailable, MdFlightTakeoff, MdHotel } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
@@ -18,6 +19,8 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const userName = Cookies.get("userName");
@@ -48,6 +51,7 @@ const Navbar = () => {
       await axios.post(`${API_BASE_URL}/api/logout`, {}, { withCredentials: true });
       setDropdownVisible(false);
       setIsMobileMenuOpen(false);
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -83,7 +87,7 @@ const Navbar = () => {
   );
 
   return (
-    <div className="bg-blue py-4 pb-48"> 
+    <div className="bg-blue py-8"> 
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center">
           <Link to={"/"}>
