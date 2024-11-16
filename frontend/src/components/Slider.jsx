@@ -4,10 +4,10 @@ const Slider = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [animate, setAnimate] = useState(true); // New state for animation
   const images = [
-    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302607/zavqakmbxremcxtxocwe_zzh2sv.jpg",
-    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302607/whn95dkscxeoibyjeouq_nl6ago.jpg",
-    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302606/mts5wyk7wmxkabqukwox_rwnnfw.jpg",
-    "https://res.cloudinary.com/dbbqxatvr/image/upload/v1726302606/cbtjokdmkbhrhoti4lju_e6p9kr.jpg",
+    "https://res.cloudinary.com/jamesndungu/image/upload/v1726302607/zavqakmbxremcxtxocwe_zzh2sv.jpg",
+    "https://res.cloudinary.com/jamesndungu/image/upload/v1726302607/whn95dkscxeoibyjeouq_nl6ago.jpg",
+    "https://res.cloudinary.com/jamesndungu/image/upload/v1726302606/cbtjokdmkbhrhoti4lju_e6p9kr.jpg",
+    "https://res.cloudinary.com/jamesndungu/image/upload/v1726302606/mts5wyk7wmxkabqukwox_rwnnfw.jpg",
   ];
 
   useEffect(() => {
