@@ -38,7 +38,7 @@ const Slider = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto -mt-32 z-10">
+    <div className="max-w-6xl mx-auto mt-8">
       <div className="slider-wrapper relative overflow-hidden">
         <img
           src={images[currentImageIndex]}
