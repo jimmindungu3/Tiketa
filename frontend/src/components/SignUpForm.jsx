@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const API_BASE_URL =
@@ -11,6 +11,8 @@ const SignUpForm = () => {
   const [fullNameError, setFullNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -47,6 +49,10 @@ const SignUpForm = () => {
         },
         { withCredentials: true }
       );
+
+      if (response && response.status === 201) {
+        navigate("/login")
+      }
 
       // Clear form data
       setFormData({
