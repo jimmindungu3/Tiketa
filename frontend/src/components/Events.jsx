@@ -1,6 +1,6 @@
 import React from "react";
-import Loader from "./Loader";
 import { Link } from "react-router-dom";
+import Loader from "./Loader";
 
 const slugify = (text) => {
   return text
@@ -9,8 +9,8 @@ const slugify = (text) => {
     .replace(/[^\w-]+/g, ""); // Remove all non-word characters
 };
 
-const Events = ({ events, loading }) => {
-  return loading ? (
+const Events = ({ events }) => {
+  return events.length === 0 ? (
     <Loader />
   ) : (
     <div className="max-w-6xl min-w-min mx-auto mt-12 p-4">
