@@ -9,7 +9,7 @@ const slugify = (text) => {
     .replace(/[^\w-]+/g, ""); // Remove all non-word characters
 };
 
-const Events = ({ events }) => {
+const Events = ({ events, handlePage }) => {
   return events.length === 0 ? (
     <Loader />
   ) : (
@@ -46,6 +46,26 @@ const Events = ({ events }) => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-12 flex justify-center space-x-8 text-sm font-semibold ">
+        <button
+          onClick={() => handlePage(1)}
+          className="py-2 px-4 bg-blue bg-opacity-96 text-gray-200 rounded-full"
+        >
+          1
+        </button>
+        <button
+          onClick={() => handlePage(2)}
+          className="py-2 px-4 bg-blue bg-opacity-96 text-gray-200 rounded-full"
+        >
+          2
+        </button>
+        <button
+          onClick={() => handlePage(3)}
+          className="py-2 px-4 bg-blue bg-opacity-96 text-gray-200 rounded-full"
+        >
+          3
+        </button>
       </div>
     </div>
   );

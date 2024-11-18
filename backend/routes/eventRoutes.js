@@ -2,13 +2,20 @@ const express = require("express");
 const router = express.Router();
 const Event = require("../models/EventSchema");
 const cloudinary = require("../utils/cloudinary");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 const myJwtSecret = process.env.SECRET_KEY;
 
 // GET Events route
 router.get("/api/events", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 8;
+  const skip = (page - 1) * limit;
+
   try {
-    const events = await Event.find();
+    let events = await Event.find().skip(skip).limit(limit);
+    if (events.length === 0 && page !== 1) {
+      events = await Event.find().limit(limit);
+    }
     res.status(200).json(events);
   } catch (err) {
     res.status(500).json({ message: "Error retrieving events", error: err });

@@ -18,22 +18,29 @@ import CreateEvent from "./pages/CreateEvent.jsx";
 
 const Main = () => {
   const [events, setEvents] = useState([]);
+  const [page, setPage] = useState(1);
+
+const handlePage = (somePage) => {
+  setPage(somePage)
+}
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/api/events`, { withCredentials: true })
+      .get(`${API_BASE_URL}/api/events?page=${page}`, { withCredentials: true })
       .then((response) => {
         setEvents(response.data);
       })
       .catch((error) => {
         console.error("There was an error fetching the events!", error);
       });
-  }, []);
+  }, [page]);
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home events={events} />,
+      element: (
+        <Home events={events} handlePage={handlePage} />
+      ),
     },
     {
       path: "/sign-up",
