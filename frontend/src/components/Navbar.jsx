@@ -22,6 +22,14 @@ const Navbar = () => {
 
   const navigate = useNavigate()
 
+  const getInitials = (name) => {
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase();
+  };
+
   useEffect(() => {
     const userName = Cookies.get("userName");
     setUserName(userName)
@@ -71,6 +79,18 @@ const Navbar = () => {
         Create Event
       </button>
     </Link>
+  );
+
+  const UserButton = ({ onClick, showFullName = false }) => (
+    <button
+      onClick={onClick}
+      className="flex items-center bg-white/10 hover:bg-white/20 rounded-full py-2 px-2 transition-colors"
+    >
+      <FaUserCircle className="text-2xl" />
+      <span className="ml-2 text-sm font-medium">
+        {userName ? (showFullName ? userName : getInitials(userName)) : ''}
+      </span>
+    </button>
   );
 
   const NavLinks = () => (
@@ -126,36 +146,35 @@ const Navbar = () => {
               {userName ? (
                 <div className="relative flex items-center">
                   <CreateEventButton />
-                  <button
-                    onClick={toggleDropdown}
-                    className="mx-2 flex items-center"
-                  >
-                    <FaUserCircle className="text-3xl mr-2" />
-                    <span>{userName}</span>
-                  </button>
-                  {dropdownVisible && (
-                    <div
-                      ref={dropdownRef}
-                      className="z-20 absolute right-0 top-full mt-2 w-48 bg-white text-black rounded-md shadow-lg"
-                    >
-                      <div className="block px-4 py-2 hover:bg-gray-200 hover:cursor-not-allowed hover:rounded-md">
-                        Edit Profile
-                      </div>
-                      <button
-                        onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-md"
+                  <div className="relative ml-2">
+                    <UserButton onClick={toggleDropdown} />
+                    {dropdownVisible && (
+                      <div
+                        ref={dropdownRef}
+                        className="z-20 absolute right-0 top-full mt-2 w-48 bg-white text-black rounded-md shadow-lg"
                       >
-                        Logout
-                      </button>
-                    </div>
-                  )}
+                        <div className="px-4 py-2 border-b border-gray-200">
+                          <div className="font-semibold">{userName}</div>
+                        </div>
+                        <div className="block px-4 py-2 hover:bg-gray-200 hover:cursor-not-allowed hover:rounded-md">
+                          Edit Profile
+                        </div>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-md"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center">
-                  <CreateEventButton />
                   <Link to={"/sign-up"}>
                     <button className="mx-2">Sign Up</button>
                   </Link>
+                  <CreateEventButton />
                 </div>
               )}
             </div>
@@ -173,8 +192,7 @@ const Navbar = () => {
               {userName ? (
                 <div className="border-t border-white/20 pt-4">
                   <div className="flex items-center mb-4">
-                    <FaUserCircle className="text-3xl mr-2" />
-                    <span>{userName}</span>
+                    <UserButton showFullName={true} />
                   </div>
                   <CreateEventButton />
                   <div className="block py-2 hover:bg-blue-700 hover:cursor-not-allowed rounded">
