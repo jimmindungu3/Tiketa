@@ -179,7 +179,7 @@ const EventForm = () => {
             type="submit"
             className="bg-red-100 hover:bg-red-200 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-100 transition-all duration-300"
           >
-            Create Event
+            Create
           </button>
         </div>
       </form>

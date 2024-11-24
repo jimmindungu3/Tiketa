@@ -147,7 +147,7 @@ const Navbar = () => {
                 </Link>
                 <Link to={"/login"}>
                   <button className="mx-2 bg-red-100 py-2 px-4 rounded-md">
-                    Login
+                    Create Event
                   </button>
                 </Link>
               </div>
@@ -188,7 +188,7 @@ const Navbar = () => {
                   </Link>
                   <Link to={"/login"}>
                     <button className="w-full bg-red-100 py-2 rounded">
-                      Login
+                      Create Event
                     </button>
                   </Link>
                 </div>
