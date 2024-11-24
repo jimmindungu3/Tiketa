@@ -65,6 +65,14 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const CreateEventButton = () => (
+    <Link to={userName ? "/create-event" : "/login"}>
+      <button className="mx-2 bg-red-100 py-2 px-4 rounded-md">
+        Create Event
+      </button>
+    </Link>
+  );
+
   const NavLinks = () => (
     <>
       <Link to={"/"} className="flex items-center mx-4" href="#">
@@ -114,44 +122,43 @@ const Navbar = () => {
 
           {/* Desktop Auth Section */}
           <div className="hidden md:block text-white font-semibold relative">
-            {userName ? (
-              <div className="relative">
-                <button
-                  onClick={toggleDropdown}
-                  className="mx-2 flex items-center"
-                >
-                  <FaUserCircle className="text-3xl mr-2" />
-                  {userName && <span>{userName}</span>}
-                </button>
-                {dropdownVisible && (
-                  <div
-                    ref={dropdownRef}
-                    className="z-20 absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg"
+            <div className="flex items-center">
+              {userName ? (
+                <div className="relative flex items-center">
+                  <CreateEventButton />
+                  <button
+                    onClick={toggleDropdown}
+                    className="mx-2 flex items-center"
                   >
-                    <div className="block px-4 py-2 hover:bg-gray-200 hover:cursor-not-allowed hover:rounded-md">
-                      Edit Profile
-                    </div>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-md"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div>
-                <Link to={"/sign-up"}>
-                  <button className="mx-2">Sign Up</button>
-                </Link>
-                <Link to={"/login"}>
-                  <button className="mx-2 bg-red-100 py-2 px-4 rounded-md">
-                    Create Event
+                    <FaUserCircle className="text-3xl mr-2" />
+                    <span>{userName}</span>
                   </button>
-                </Link>
-              </div>
-            )}
+                  {dropdownVisible && (
+                    <div
+                      ref={dropdownRef}
+                      className="z-20 absolute right-0 top-full mt-2 w-48 bg-white text-black rounded-md shadow-lg"
+                    >
+                      <div className="block px-4 py-2 hover:bg-gray-200 hover:cursor-not-allowed hover:rounded-md">
+                        Edit Profile
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-200 hover:rounded-md"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center">
+                  <CreateEventButton />
+                  <Link to={"/sign-up"}>
+                    <button className="mx-2">Sign Up</button>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -167,8 +174,9 @@ const Navbar = () => {
                 <div className="border-t border-white/20 pt-4">
                   <div className="flex items-center mb-4">
                     <FaUserCircle className="text-3xl mr-2" />
-                    {userName && <span>{userName}</span>}
+                    <span>{userName}</span>
                   </div>
+                  <CreateEventButton />
                   <div className="block py-2 hover:bg-blue-700 hover:cursor-not-allowed rounded">
                     Edit Profile
                   </div>
@@ -181,14 +189,10 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="border-t border-white/20 pt-4 flex flex-col space-y-2">
+                  <CreateEventButton />
                   <Link to={"/sign-up"}>
                     <button className="w-full py-2 hover:bg-blue-700 rounded">
                       Sign Up
-                    </button>
-                  </Link>
-                  <Link to={"/login"}>
-                    <button className="w-full bg-red-100 py-2 rounded">
-                      Create Event
                     </button>
                   </Link>
                 </div>
