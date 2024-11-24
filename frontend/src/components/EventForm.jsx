@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const API_BASE_URL =
@@ -7,42 +9,34 @@ const API_BASE_URL =
     : import.meta.env.VITE_API_BASE_URL_PROD;
 
 const EventForm = () => {
-  const [image, setImage] = useState("");
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [description, setDescription] = useState("");
-  const [venue, setVenue] = useState("");
-  const [regular, setRegular] = useState("");
-  const [vip, setVip] = useState("");
+  const [formData, setFormData] = useState({
+    image: "",
+    title: "",
+    date: "",
+    description: "",
+    venue: "",
+    regular: "",
+    vip: "",
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/api/events`,
-        {
-          image,
-          title,
-          date,
-          description,
-          venue,
-          regular,
-          vip,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(
-        "Error creating event:",
-        error.response?.data || error.message
-      );
-    }
+  const resetForm = () => {
+    setFormData({
+      image: "",
+      title: "",
+      date: "",
+      description: "",
+      venue: "",
+      regular: "",
+      vip: "",
+    });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleImageSelection = (e) => {
@@ -51,17 +45,49 @@ const EventForm = () => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setImage(reader.result);
+        setFormData((prevData) => ({
+          ...prevData,
+          image: reader.result,
+        }));
       };
     } else {
-      setImage("");
+      setFormData((prevData) => ({
+        ...prevData,
+        image: "",
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/events`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 201) {
+        toast.success("Event created successfully");
+        resetForm();
+      }
+    } catch (error) {
+      toast.error("Error creating event. Check login status and try again");
+      console.error(
+        "Error creating event:",
+        error.response?.data || error.message
+      );
     }
   };
 
   return (
     <div className="bg-blue text-white p-8 max-w-2xl mx-auto my-16 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold mb-6">Create New Event</h2>
-
+      <ToastContainer />
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Event Banner */}
         <div>
@@ -87,9 +113,9 @@ const EventForm = () => {
             required
             type="text"
             name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 rounded-lg border border-transparent focus:border-red-200  text-gray-950 focus:outline-none"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full p-2 rounded-lg border border-transparent focus:border-red-200 text-gray-950 focus:outline-none"
             placeholder="Enter event title"
           />
         </div>
@@ -103,9 +129,9 @@ const EventForm = () => {
             required
             type="datetime-local"
             name="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full p-2 rounded-lg border border-transparent focus:border-red-200  text-gray-950 focus:outline-none"
+            value={formData.date}
+            onChange={handleChange}
+            className="w-full p-2 rounded-lg border border-transparent focus:border-red-200 text-gray-950 focus:outline-none"
           />
         </div>
 
@@ -118,8 +144,8 @@ const EventForm = () => {
             required
             name="description"
             rows="5"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={formData.description}
+            onChange={handleChange}
             className="w-full p-2 rounded-lg border border-transparent focus:border-red-200 text-gray-950 focus:outline-none"
             placeholder="Write a brief description"
           ></textarea>
@@ -134,8 +160,8 @@ const EventForm = () => {
             required
             type="text"
             name="venue"
-            value={venue}
-            onChange={(e) => setVenue(e.target.value)}
+            value={formData.venue}
+            onChange={handleChange}
             className="w-full p-2 rounded-lg border border-transparent focus:border-red-200 text-gray-950 focus:outline-none"
             placeholder="Enter event venue"
           />
@@ -150,8 +176,8 @@ const EventForm = () => {
             required
             type="number"
             name="regular"
-            value={regular}
-            onChange={(e) => setRegular(e.target.value)}
+            value={formData.regular}
+            onChange={handleChange}
             className="w-full p-2 rounded-lg border border-transparent focus:border-red-200 text-gray-950 focus:outline-none"
             placeholder="Enter amount"
           />
@@ -166,8 +192,8 @@ const EventForm = () => {
             required
             type="number"
             name="vip"
-            value={vip}
-            onChange={(e) => setVip(e.target.value)}
+            value={formData.vip}
+            onChange={handleChange}
             className="w-full p-2 rounded-lg border border-transparent focus:border-red-200 text-gray-950 focus:outline-none"
             placeholder="Enter amount"
           />

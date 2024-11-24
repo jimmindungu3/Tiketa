@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { MdEventAvailable, MdFlightTakeoff, MdHotel } from "react-icons/md";
@@ -6,7 +7,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { RiMovie2Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 
 const API_BASE_URL =
   import.meta.env.VITE_ENVIRONMENT === "development"
@@ -20,19 +21,19 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const getInitials = (name) => {
     return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
       .toUpperCase();
   };
 
   useEffect(() => {
     const userName = Cookies.get("userName");
-    setUserName(userName)
+    setUserName(userName);
   }, []);
 
   useEffect(() => {
@@ -54,9 +55,13 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      Cookies.remove("userName")
-      setUserName(null)
-      await axios.post(`${API_BASE_URL}/api/logout`, {}, { withCredentials: true });
+      Cookies.remove("userName");
+      setUserName(null);
+      await axios.post(
+        `${API_BASE_URL}/api/logout`,
+        {},
+        { withCredentials: true }
+      );
       setDropdownVisible(false);
       setIsMobileMenuOpen(false);
       navigate("/");
@@ -88,7 +93,7 @@ const Navbar = () => {
     >
       <FaUserCircle className="text-2xl" />
       <span className="ml-2 text-sm font-medium">
-        {userName ? (showFullName ? userName : getInitials(userName)) : ''}
+        {userName ? (showFullName ? userName : getInitials(userName)) : ""}
       </span>
     </button>
   );
@@ -115,8 +120,9 @@ const Navbar = () => {
   );
 
   return (
-    <div className="bg-blue py-8"> 
+    <div className="bg-blue py-8">
       <div className="max-w-6xl mx-auto px-4">
+        <ToastContainer position="top-center" autoClose={3000} />
         <div className="flex justify-between items-center">
           <Link to={"/"}>
             <h2 className="text-red-100 font-bold text-3xl">TIKETA</h2>
@@ -180,7 +186,6 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div
