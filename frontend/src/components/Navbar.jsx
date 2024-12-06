@@ -89,7 +89,7 @@ const Navbar = () => {
   const UserButton = ({ onClick, showFullName = false }) => (
     <button
       onClick={onClick}
-      className="flex items-center bg-white/10 hover:bg-white/20 rounded-full py-2 px-2 transition-colors"
+      className="flex items-center bg-white/10 hover:bg-white/20 rounded-full py-2 px-2 ml-2 transition-colors"
     >
       <FaUserCircle className="text-2xl" />
       <span className="ml-2 text-sm font-medium">

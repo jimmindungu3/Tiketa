@@ -9,6 +9,24 @@ const slugify = (text) => {
     .replace(/[^\w-]+/g, ""); // Remove all non-word characters
 };
 
+const formatDate = (isoDateString) => {
+  const date = new Date(isoDateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+};
+
+const formatTime = (isoDateString) => {
+  const date = new Date(isoDateString);
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+};
+
 const Events = ({ events, handlePage }) => {
   return events.length === 0 ? (
     <Loader />
@@ -34,9 +52,9 @@ const Events = ({ events, handlePage }) => {
                   {event.title}
                 </h2>
                 <p className="text-red-100 text-xs md:text-sm mb-2 font-semibold">
-                  {event.date}
+                  {formatDate(event.date)} at {formatTime(event.date)}
                 </p>
-                <p className="text-sm md:text-lg text-bluegray mb-2 md:mb-4">
+                <p className="text-sm md:text-base text-bluegray mb-2 md:mb-4">
                   {event.venue}
                 </p>
               </div>
