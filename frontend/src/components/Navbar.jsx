@@ -200,12 +200,12 @@ const Navbar = () => {
                     <UserButton showFullName={true} />
                   </div>
                   <CreateEventButton />
-                  <div className="block py-2 hover:bg-blue-700 hover:cursor-not-allowed rounded">
+                  <div className="block py-2 ml-2 mt-2 hover:bg-blue-700 hover:cursor-not-allowed rounded">
                     Edit Profile
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left py-2 hover:bg-blue-700 rounded"
+                    className="text-left py-2 ml-2 hover:bg-blue-700 rounded"
                   >
                     Logout
                   </button>
@@ -214,7 +214,7 @@ const Navbar = () => {
                 <div className="border-t border-white/20 pt-4 flex flex-col space-y-2">
                   <CreateEventButton />
                   <Link to={"/sign-up"}>
-                    <button className="w-full py-2 hover:bg-blue-700 rounded">
+                    <button className="text-left py-2 ml-2 hover:bg-blue-700 rounded">
                       Sign Up
                     </button>
                   </Link>
