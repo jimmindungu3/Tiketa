@@ -39,7 +39,7 @@ const Slider = () => {
 
   return (
     <div className="max-w-6xl mx-auto mt-4 md:mt-8">
-      <div className="slider-wrapper relative overflow-hidden">
+      <div className="slider-wrapper relative overflow-hidden mx-4">
         <img
           src={images[currentImageIndex]}
           alt="Image Slider"

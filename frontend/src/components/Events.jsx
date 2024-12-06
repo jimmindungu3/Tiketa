@@ -24,7 +24,7 @@ const Events = ({ events, handlePage }) => {
             className="rounded-md overflow-hidden shadow-lg flex flex-col h-full"
           >
             <img
-              className="h-32 w-full md:h-64 object-cover t-rounded-lg"
+              className="h-32 w-full object-cover md:h-64 t-rounded-lg"
               src={event.image}
               alt={event.title}
             />
@@ -36,7 +36,9 @@ const Events = ({ events, handlePage }) => {
                 <p className="text-red-100 text-xs md:text-sm mb-2 font-semibold">
                   {event.date}
                 </p>
-                <p className="text-sm md:text-lg text-bluegray mb-4">{event.venue}</p>
+                <p className="text-sm md:text-lg text-bluegray mb-2 md:mb-4">
+                  {event.venue}
+                </p>
               </div>
               <button className="bg-red-100 py-2 text-sm md:text-base text-center text-white font-semibold rounded-md mt-auto">
                 <Link to={`/buy-ticket/${slugify(event.title)}`}>
