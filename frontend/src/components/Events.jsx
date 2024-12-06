@@ -17,28 +17,28 @@ const Events = ({ events, handlePage }) => {
       <h1 className="text-3xl font-bold text-red-100 text-center mb-12">
         Happening Soon
       </h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
         {events.map((event) => (
           <div
             key={event._id}
             className="rounded-md overflow-hidden shadow-lg flex flex-col h-full"
           >
             <img
-              className="w-full h-64 object-cover rounded-md"
+              className="h-32 w-full md:h-64 object-cover t-rounded-lg"
               src={event.image}
               alt={event.title}
             />
-            <div className="p-4 flex flex-col flex-grow justify-between">
+            <div className="p-2 md:p-4 flex flex-col flex-grow justify-between">
               <div className="flex-grow">
-                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                <h2 className="text-sm md:text-xl font-bold text-gray-900 mb-2">
                   {event.title}
                 </h2>
-                <p className="text-red-100 text-sm mb-2 font-semibold">
+                <p className="text-red-100 text-xs md:text-sm mb-2 font-semibold">
                   {event.date}
                 </p>
-                <p className="text-bluegray mb-4">{event.venue}</p>
+                <p className="text-sm md:text-lg text-bluegray mb-4">{event.venue}</p>
               </div>
-              <button className="bg-red-100 py-2 text-center text-white font-semibold rounded-md mt-auto">
+              <button className="bg-red-100 py-2 text-sm md:text-base text-center text-white font-semibold rounded-md mt-auto">
                 <Link to={`/buy-ticket/${slugify(event.title)}`}>
                   BUY TICKET
                 </Link>
