@@ -38,12 +38,12 @@ const Slider = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-8">
+    <div className="max-w-6xl mx-auto mt-4 md:mt-8">
       <div className="slider-wrapper relative overflow-hidden">
         <img
           src={images[currentImageIndex]}
           alt="Image Slider"
-          className={`mx-auto h-96 w-full rounded-lg shadow-md transition duration-500 ease-in-out ${
+          className={`mx-auto h-48 md:h-96 w-full rounded-lg shadow-md transition duration-500 ease-in-out ${
             animate ? "slider-image" : ""
           }`}
         />
