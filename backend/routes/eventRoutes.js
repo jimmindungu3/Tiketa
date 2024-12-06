@@ -22,6 +22,7 @@ router.get("/api/events", async (req, res) => {
   }
 });
 
+// POST event route
 router.post("/api/events", async (req, res) => {
   const jwtToken = req.cookies.jwt;
 
@@ -65,6 +66,21 @@ router.post("/api/events", async (req, res) => {
     }
   } else {
     res.status(401).json({ message: "Protected route! Please login" });
+  }
+});
+
+// Update event route
+router.patch("/api/events/:id", async (req, res) => {
+  const eventId = req.params.id;
+  const eventBody = req.body;
+
+  try {
+    const updatedEvent = await Event.findByIdAndUpdate(eventId, eventBody, {
+      new: true,
+    });
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    res.json({ error: error }).status(500);
   }
 });
 
